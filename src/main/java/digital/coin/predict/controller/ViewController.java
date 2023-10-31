@@ -22,7 +22,7 @@ public class ViewController {
 //        String path = result.getPath();
 
 //        model.addAttribute("imagePath", path);
-
+//
         return "view";
     }
 
