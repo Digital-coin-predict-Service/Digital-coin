@@ -17,11 +17,11 @@ public class ViewController {
     @PostMapping("/view")
     public String view(@RequestParam String stock, Model model) {
 
-        Stock result = stockService.findByName(stock);
+//        Stock result = stockService.findByName(stock);
 
-        String path = result.getPath();
+//        String path = result.getPath();
 
-        model.addAttribute("imagePath", path);
+//        model.addAttribute("imagePath", path);
 
         return "view";
     }
