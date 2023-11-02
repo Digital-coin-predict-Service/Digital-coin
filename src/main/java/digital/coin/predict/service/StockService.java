@@ -33,6 +33,6 @@ public class StockService {
 
 //    public Optional<Stock> findOne(Long id) {
 //        return stockRepository.findOne();
-//    }
+//    }//
 
 }

@@ -28,4 +28,4 @@ public class Stock extends BaseEntity {
 //    @OneToMany(mappedBy = "stock")
 //    private List<Favorite> favorites;
 
-}
+}git
