@@ -22,14 +22,17 @@ public class FavoriteService {
     public User getUser(OAuth2User oAuth2User){
         return userRepository.findByEmail(oAuth2User.getAttribute("email")).orElseThrow();
     }
+
     public Boolean addFavorite(User user, Long id){
         Optional<Stock> optionalStock = stockRepository.findById(id);
-        if(optionalStock.isEmpty()){
+
+        if(optionalStock.isEmpty())
             return false;
-        }
+
         Stock stock = optionalStock.get();
         Favorite favorite = Favorite.builder().stock_id(stock).user_id(user).build();
         favoriteRepository.save(favorite);
+
         return true;
     }
 

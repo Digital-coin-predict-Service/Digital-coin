@@ -16,13 +16,13 @@ import java.util.List;
 @Builder
 public class User extends BaseEntity {
     @Id
-    @Column(name = "email")
+    @Column(name = "user_email")
     private String email;
 
     private String provider;
 
-//    @OneToMany(mappedBy = "user")
-//    private List<Favorite> favorites = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<Favorite> favorites;
 
     @Enumerated
     private Role role;

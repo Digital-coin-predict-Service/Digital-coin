@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @RequiredArgsConstructor
@@ -19,5 +22,10 @@ public class Stock extends BaseEntity {
 
     private String name;
 
+    //json file path
     private String path;
+
+//    @OneToMany(mappedBy = "stock")
+//    private List<Favorite> favorites;
+
 }
