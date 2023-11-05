@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,6 +35,20 @@ public class FavoriteService {
         favoriteRepository.save(favorite);
 
         return true;
+    }
+
+    public Boolean deleteOne(Long id) {
+        Optional<Favorite> findFavorite = favoriteRepository.findById(id);
+
+        if (findFavorite.isEmpty()) return false;
+
+        favoriteRepository.deleteById(id);
+
+        return true;
+    }
+
+    public List<Favorite> getFavoritesByUserEmail(String email) {
+        return favoriteRepository.findAllByEmail(email);
     }
 
 }

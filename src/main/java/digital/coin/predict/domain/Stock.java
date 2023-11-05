@@ -1,16 +1,14 @@
 package digital.coin.predict.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -25,7 +23,7 @@ public class Stock extends BaseEntity {
     //json file path
     private String path;
 
-//    @OneToMany(mappedBy = "stock")
-//    private List<Favorite> favorites;
+    @OneToMany(mappedBy = "stock")
+    private List<Favorite> favorites;
 
 }
