@@ -6,7 +6,6 @@ import lombok.Getter;
 public class FavoriteRequestDto {
 
     private Long id;
-
     private String name;
 
 }

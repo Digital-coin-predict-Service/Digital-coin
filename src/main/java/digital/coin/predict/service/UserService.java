@@ -30,8 +30,10 @@ public class UserService {
     public void deleteUser(String email) {
         Optional<User> rUser = userRepository.findByEmail(email);
 
-        if (rUser.isPresent()) {
-            userRepository.deleteUserByEmail(email);
+        if (rUser.isEmpty()) {
+            return;
         }
+
+        userRepository.deleteUserByEmail(email);
     }
 }

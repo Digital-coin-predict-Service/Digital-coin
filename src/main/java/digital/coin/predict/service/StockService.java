@@ -26,12 +26,15 @@ public class StockService {
     public void updateStock(Long id, String name, String path) {
         Optional<Stock> stock = stockRepository.findById(id);
 
-        if (stock.isPresent()) {
-            Stock uStock = stock.get();
-
-            uStock.setName(name);
-            uStock.setPath(path);
+        if (stock.isEmpty()) {
+            return;
         }
+
+        Stock uStock = stock.get();
+
+        uStock.setName(name);
+        uStock.setPath(path);
+
     }
 
     public List<Stock> findStocks() {
@@ -46,7 +49,7 @@ public class StockService {
         Optional<Stock> rStock = stockRepository.findById(id);
 
         if (rStock.isPresent()) {
-            stockRepository.deleteStockById(id);
+            stockRepository.deleteById(id);
         }
     }
 
