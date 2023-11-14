@@ -37,12 +37,12 @@ public class FavoriteService {
         return true;
     }
 
-    public Boolean deleteOne(Long id) {
-        Optional<Favorite> findFavorite = favoriteRepository.findById(id);
+    public Boolean deleteOne(String email, Long id) {
+        Optional<Favorite> findFavorite = favoriteRepository.findByUser_idAndId(email, id);
 
         if (findFavorite.isEmpty()) return false;
 
-        favoriteRepository.deleteById(id);
+        favoriteRepository.deleteById(findFavorite.get().getId());
 
         return true;
     }
