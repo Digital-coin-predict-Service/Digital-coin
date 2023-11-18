@@ -37,18 +37,10 @@ public class FavoriteService {
         return true;
     }
 
-    public Boolean deleteOne(String email, Long id) {
-        Optional<Favorite> findFavorite = favoriteRepository.findByUser_idAndId(email, id);
 
-        if (findFavorite.isEmpty()) return false;
-
-        favoriteRepository.deleteById(findFavorite.get().getId());
-
-        return true;
-    }
-
-    public List<Favorite> getFavoritesByUserEmail(String email) {
-        return favoriteRepository.findAllByEmail(email);
+    //입력받은 모든 id에 대한 검색
+    public List<Favorite> findAllByStockId(List<Long> id) {
+        return favoriteRepository.findAllById(id);
     }
 
 }

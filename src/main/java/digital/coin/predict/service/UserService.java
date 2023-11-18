@@ -1,9 +1,7 @@
 package digital.coin.predict.service;
 
-import digital.coin.predict.domain.Favorite;
 import digital.coin.predict.domain.User;
-import digital.coin.predict.repository.FavoriteRepository;
-import digital.coin.predict.repository.StockRepository;
+import digital.coin.predict.dto.UserRequestDto;
 import digital.coin.predict.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,13 +25,28 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public void deleteUser(String email) {
+
+    public User updateUser(String email, UserRequestDto userRequestDto) {
+        Optional<User> user = userRepository.findByEmail(email);
+
+        if (user.isEmpty()) {
+            return null;
+        }
+
+        User updateUser = user.get().updateUser(email, userRequestDto.getRole());
+        userRepository.save(updateUser);
+
+        return updateUser;
+    }
+
+    public boolean deleteUser(String email) {
         Optional<User> rUser = userRepository.findByEmail(email);
 
         if (rUser.isEmpty()) {
-            return;
+            return true;
         }
 
         userRepository.deleteUserByEmail(email);
+        return true;
     }
 }

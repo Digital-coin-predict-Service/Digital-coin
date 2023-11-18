@@ -1,14 +1,14 @@
 package digital.coin.predict.repository;
 
 import digital.coin.predict.domain.Favorite;
+import digital.coin.predict.domain.Stock;
 import digital.coin.predict.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface FavoriteRepository extends JpaRepository<Favorite,Long> {
-    //Does it work well?
-    List<Favorite> findAllByEmail(String email);
-    Optional<Favorite> findByUser_idAndId(String email, Long favoriteId);
+//    List<Favorite> findAllByEmail(String email);
 }

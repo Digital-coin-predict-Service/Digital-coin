@@ -3,6 +3,7 @@ package digital.coin.predict.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,8 @@ public class Stock extends BaseEntity {
     //json file path
     private String path;
 
-    @OneToMany(mappedBy = "stock")
-    private List<Favorite> favorites;
-
+    public Stock(String name) {
+        this.name = name;
+        this.path = "Digital coin/"+name;
+    }
 }

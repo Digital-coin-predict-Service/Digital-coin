@@ -8,7 +8,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -18,9 +17,6 @@ public class User extends BaseEntity {
     private String email;
 
     private String provider;
-
-    @OneToMany(mappedBy = "user")
-    private List<Favorite> favorites;
 
     @Enumerated
     private Role role;

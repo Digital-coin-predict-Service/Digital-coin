@@ -16,10 +16,20 @@ import java.util.Optional;
 public class StockService {
 
     @Autowired
-    StockRepository stockRepository;
+    private StockRepository stockRepository;
 
     public Optional<Stock> findByName(String name) {
         return stockRepository.findByName(name);
+    }
+
+    public Optional<Stock> findById(Long id) {
+        return stockRepository.findById(id);
+    }
+
+    @Transactional
+    public Long join(Stock stock) {
+        stockRepository.save(stock);
+        return stock.getId();
     }
 
     @Transactional
@@ -37,12 +47,8 @@ public class StockService {
 
     }
 
-    public List<Stock> findStocks() {
+    public List<Stock> findAll() {
         return stockRepository.findAll();
-    }
-
-    public Optional<Stock> findById(Long id) {
-        return stockRepository.findById(id);
     }
 
     public void deleteStock(Long id) {
