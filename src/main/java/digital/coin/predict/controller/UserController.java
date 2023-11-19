@@ -43,8 +43,8 @@ public class UserController {
         return ResponseEntity.ok(userResponseDtoList);
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity<UserResponseDto> findUser(@PathVariable String email) {
+    @GetMapping
+    public ResponseEntity<UserResponseDto> findUser(@RequestParam(value = "email") String email) {
         Optional<User> result = userService.findOne(email);
 
         if (result.isEmpty())
@@ -56,7 +56,6 @@ public class UserController {
                 user.getUpdate_at(), user.getRole()));
     }
 
-    //바로 업데이트 안됨 persistent 때문.
     @PostMapping("/update/{email}")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable String email, @RequestBody UserRequestDto userRequestDto) {
         User updateUser = userService.updateUser(email, userRequestDto);
@@ -64,11 +63,9 @@ public class UserController {
         return ResponseEntity.ok(new UserResponseDto(updateUser.getEmail(), updateUser.getCreate_at(), updateUser.getUpdate_at(), updateUser.getRole()));
     }
 
-    //바로 삭제 안됨 persistent 때문.
-    @PostMapping("/delete/{email}")
-    public ResponseEntity<Void> deleteUser(@PathVariable @RequestBody String email) {
-        if (!userService.deleteUser(email))
-            return ResponseEntity.notFound().build();
+    @PostMapping("/delete")
+    public ResponseEntity<Void> deleteUser(UserRequestDto userRequestDto) {
+        userService.deleteUser(userRequestDto.getEmail());
 
         return ResponseEntity.ok().build();
     }

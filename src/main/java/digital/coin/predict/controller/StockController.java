@@ -31,7 +31,7 @@ public class StockController {
         List<StockResponseDto> stockResponseDtoList = new ArrayList<>(stocks.size());
 
         for (Stock stock : stocks) {
-            stockResponseDto = new StockResponseDto(stock.getId(), stock.getName(), stock.getPath(),
+            stockResponseDto = new StockResponseDto(stock.getId(), stock.getName(),
                     stock.getCreate_at(), stock.getUpdate_at());
 
             stockResponseDtoList.add(stockResponseDto);
@@ -50,7 +50,7 @@ public class StockController {
         Stock stock = result.get();
 
         StockResponseDto stockResponseDto = new StockResponseDto(stock.getId(), stock.getName(),
-                stock.getPath(), stock.getCreate_at(), stock.getUpdate_at());
+                stock.getCreate_at(), stock.getUpdate_at());
 
         return ResponseEntity.ok(stockResponseDto);
     }
@@ -59,21 +59,39 @@ public class StockController {
     public ResponseEntity<StockResponseDto> findByName(@RequestBody StockRequestDto stockRequestDto) {
         Optional<Stock> result = stockService.findByName(stockRequestDto.getName());
 
-        if(result.isEmpty())
+        if (result.isEmpty())
             return ResponseEntity.notFound().build();
 
         Stock stock = result.get();
 
-        StockResponseDto stockResponseDto = new StockResponseDto(stock.getId(), stock.getName(), stock.getPath(),
+        StockResponseDto stockResponseDto = new StockResponseDto(stock.getId(), stock.getName(),
                 stock.getCreate_at(), stock.getUpdate_at());
 
         return ResponseEntity.ok(stockResponseDto);
     }
 
     @PostMapping("/join")
-    public Stock join(@RequestBody StockRequestDto stockRequestDto) {
+    public ResponseEntity<StockResponseDto> join(@RequestBody StockRequestDto stockRequestDto) {
         Stock stock = new Stock(stockRequestDto.getName());
+
         stockService.join(stock);
-        return stock;
+
+        StockResponseDto stockResponseDto = new StockResponseDto(stock.getId(), stock.getName(), stock.getCreate_at(), stock.getUpdate_at());
+
+        return ResponseEntity.ok(stockResponseDto);
+    }
+
+    @PostMapping("/update/{id}")
+    public ResponseEntity<Void> updateStock(@PathVariable Long id, StockRequestDto stockRequestDto) {
+        stockService.updateStock(id, stockRequestDto.getName(), stockRequestDto.getPath());
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<Void> deleteStock(StockRequestDto stockRequestDto) {
+        stockService.deleteStock(stockRequestDto.getId());
+
+        return ResponseEntity.ok().build();
     }
 }

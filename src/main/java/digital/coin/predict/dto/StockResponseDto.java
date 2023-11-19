@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 public class StockResponseDto {
     private Long id;
     private String name;
-    private String path;
     private LocalDateTime create_at;
     private LocalDateTime update_at;
 }

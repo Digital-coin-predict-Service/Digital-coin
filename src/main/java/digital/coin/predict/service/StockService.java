@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class StockService {
 
     @Autowired
@@ -26,25 +26,23 @@ public class StockService {
         return stockRepository.findById(id);
     }
 
-    @Transactional
     public Long join(Stock stock) {
         stockRepository.save(stock);
         return stock.getId();
     }
 
-    @Transactional
     public void updateStock(Long id, String name, String path) {
-        Optional<Stock> stock = stockRepository.findById(id);
+        Optional<Stock> result = stockRepository.findById(id);
 
-        if (stock.isEmpty()) {
+        if (result.isEmpty())
             return;
-        }
 
-        Stock uStock = stock.get();
+        Stock stock = result.get();
 
-        uStock.setName(name);
-        uStock.setPath(path);
+        stock.setName(name);
+        stock.setPath(path);
 
+        stockRepository.save(stock);
     }
 
     public List<Stock> findAll() {
@@ -52,11 +50,7 @@ public class StockService {
     }
 
     public void deleteStock(Long id) {
-        Optional<Stock> rStock = stockRepository.findById(id);
-
-        if (rStock.isPresent()) {
-            stockRepository.deleteById(id);
-        }
+        stockRepository.deleteById(id);
     }
 
 }

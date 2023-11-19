@@ -12,7 +12,7 @@ import java.util.Optional;
 
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
@@ -25,28 +25,23 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-
     public User updateUser(String email, UserRequestDto userRequestDto) {
         Optional<User> user = userRepository.findByEmail(email);
 
-        if (user.isEmpty()) {
+        if (user.isEmpty())
             return null;
-        }
 
-        User updateUser = user.get().updateUser(email, userRequestDto.getRole());
-        userRepository.save(updateUser);
+        User getUser = user.get();
+        getUser.updateUser(email, userRequestDto.getRole());
 
-        return updateUser;
+        userRepository.save(getUser);
+
+        return getUser;
     }
 
     public boolean deleteUser(String email) {
-        Optional<User> rUser = userRepository.findByEmail(email);
-
-        if (rUser.isEmpty()) {
-            return true;
-        }
-
         userRepository.deleteUserByEmail(email);
+
         return true;
     }
 }
