@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -44,7 +46,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<UserResponseDto> findUser(@RequestParam(value = "email") String email) {
+    public ResponseEntity<UserResponseDto> findUser(@RequestParam(value = "p") String email) {
         Optional<User> result = userService.findOne(email);
 
         if (result.isEmpty())
@@ -56,16 +58,18 @@ public class UserController {
                 user.getUpdate_at(), user.getRole()));
     }
 
-    @PostMapping("/update/{email}")
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable String email, @RequestBody UserRequestDto userRequestDto) {
-        User updateUser = userService.updateUser(email, userRequestDto);
+    @PostMapping("/update")
+    public ResponseEntity<Void> updateUser(@AuthenticationPrincipal OAuth2User oAuth2User, @RequestBody UserRequestDto userRequestDto) {
+        User user = userService.getUser(oAuth2User);
 
-        return ResponseEntity.ok(new UserResponseDto(updateUser.getEmail(), updateUser.getCreate_at(), updateUser.getUpdate_at(), updateUser.getRole()));
+        User updateUser = userService.updateUser(user.getEmail(), userRequestDto);
+
+        return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/delete")
-    public ResponseEntity<Void> deleteUser(UserRequestDto userRequestDto) {
-        userService.deleteUser(userRequestDto.getEmail());
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteUser(@RequestParam(value = "p") String email) {
+        userService.deleteUser(email);
 
         return ResponseEntity.ok().build();
     }

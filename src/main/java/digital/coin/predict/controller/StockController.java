@@ -64,21 +64,21 @@ public class StockController {
 
         Stock stock = result.get();
 
-        StockResponseDto stockResponseDto = new StockResponseDto(stock.getId(), stock.getName(),
-                stock.getCreate_at(), stock.getUpdate_at());
+        StockResponseDto stockResponseDto = new StockResponseDto();
+
+        stockResponseDto.setName(stock.getName());
+        stockResponseDto.setId(stock.getId());
 
         return ResponseEntity.ok(stockResponseDto);
     }
 
     @PostMapping("/join")
-    public ResponseEntity<StockResponseDto> join(@RequestBody StockRequestDto stockRequestDto) {
+    public ResponseEntity<Void> join(@RequestBody StockRequestDto stockRequestDto) {
         Stock stock = new Stock(stockRequestDto.getName());
 
         stockService.join(stock);
 
-        StockResponseDto stockResponseDto = new StockResponseDto(stock.getId(), stock.getName(), stock.getCreate_at(), stock.getUpdate_at());
-
-        return ResponseEntity.ok(stockResponseDto);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/update/{id}")
@@ -88,9 +88,9 @@ public class StockController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/delete")
-    public ResponseEntity<Void> deleteStock(StockRequestDto stockRequestDto) {
-        stockService.deleteStock(stockRequestDto.getId());
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteStock(@RequestParam(value = "v") Long id) {
+        stockService.deleteStock(id);
 
         return ResponseEntity.ok().build();
     }
