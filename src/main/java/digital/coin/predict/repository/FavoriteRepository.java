@@ -12,9 +12,14 @@ import java.util.List;
 
 @Repository
 public interface FavoriteRepository extends JpaRepository<Favorite,Long> {
-//    @Query("SELECT f FROM Favorite f WHERE f.stock_id = :stock")
-//    List<Favorite> findAllByStock_id(@Param("stock") Stock stock);
+    @Query("SELECT f FROM Favorite f WHERE f.stock = :stock")
+    List<Favorite> findAllByStock(@Param("stock") Stock stock);
 
-//    @Query("SELECT f FROM Favorite f WHERE f.user_id = :user")
-//    List<Favorite> findAllByUserId(@Param("user") User user);
+    @Query("SELECT f FROM Favorite f WHERE f.user = :user")
+    List<Favorite> findAllByUser(@Param("user") User user);
+
+//    @Query("DELETE FROM Favorite f WHERE f.user = :user AND f.stock = :stock")
+//    Boolean deleteFavoriteByUserAndStock(@Param("user") User user,@Param("stock") Stock stock);
+//
+//    Boolean deleteFavoritesByUser(User user);
 }

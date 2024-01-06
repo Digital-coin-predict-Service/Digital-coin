@@ -18,9 +18,9 @@ public class Favorite extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_email")
-    private User user_id;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name ="stock_id")
-    private Stock stock_id;
+    private Stock stock;
 }

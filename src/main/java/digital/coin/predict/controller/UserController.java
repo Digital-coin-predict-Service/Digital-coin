@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -58,14 +56,14 @@ public class UserController {
                 user.getUpdate_at(), user.getRole()));
     }
 
-    @PostMapping("/update")
-    public ResponseEntity<Void> updateUser(@AuthenticationPrincipal OAuth2User oAuth2User, @RequestBody UserRequestDto userRequestDto) {
-        User user = userService.getUser(oAuth2User);
-
-        User updateUser = userService.updateUser(user.getEmail(), userRequestDto);
-
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/update")
+//    public ResponseEntity<Void> updateUser(@AuthenticationPrincipal OAuth2User oAuth2User, @RequestBody UserRequestDto userRequestDto) {
+//        User user = userService.getUser(oAuth2User);
+//
+//        User updateUser = userService.updateUser(user.getEmail(), userRequestDto);
+//
+//        return ResponseEntity.ok().build();
+//    }
 
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteUser(@RequestParam(value = "p") String email) {

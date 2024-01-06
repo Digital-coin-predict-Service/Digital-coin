@@ -7,13 +7,15 @@ import digital.coin.predict.service.StockService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+//@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/stock")
 public class StockController {
@@ -81,8 +83,8 @@ public class StockController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/update/{id}")
-    public ResponseEntity<Void> updateStock(@PathVariable Long id, StockRequestDto stockRequestDto) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateStock(@PathVariable Long id, @RequestBody StockRequestDto stockRequestDto) {
         stockService.updateStock(id, stockRequestDto.getName(), stockRequestDto.getPath());
 
         return ResponseEntity.ok().build();
@@ -93,5 +95,21 @@ public class StockController {
         stockService.deleteStock(id);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/new")
+    public String addView(@ModelAttribute("stockRequestDto") StockRequestDto stockRequestDto) {
+        System.out.println(123);
+        return "save";
+    }
+
+    @PostMapping("/new")
+    public String addStock(@ModelAttribute("stockRequestDto") StockRequestDto stockRequestDto) {
+        System.out.println(stockRequestDto.getName());
+        Stock stock = new Stock(stockRequestDto.getName());
+
+        stockService.join(stock);
+
+        return "redirect:/";
     }
 }

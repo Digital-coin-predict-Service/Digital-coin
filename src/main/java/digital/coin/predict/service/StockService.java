@@ -39,8 +39,14 @@ public class StockService {
 
         Stock stock = result.get();
 
-        stock.setName(name);
-        stock.setPath(path);
+        if (name == null) {
+            stock.setPath(path);
+        } else if (path == null) {
+            stock.setName(name);
+        } else {
+            stock.setName(name);
+            stock.setPath(path);
+        }
 
         stockRepository.save(stock);
     }

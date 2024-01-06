@@ -24,8 +24,12 @@ public class Stock extends BaseEntity {
     //json file path
     private String path;
 
+    private int latestPrice;
+
+    private int errorRate;
+
     public Stock(String name) {
         this.name = name;
-        this.path = "Digital coin/"+name;
+        this.path = "E:/Digital coin/src/main/resources/static/" + name + ".json";
     }
 }

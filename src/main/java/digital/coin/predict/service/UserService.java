@@ -4,7 +4,6 @@ import digital.coin.predict.domain.User;
 import digital.coin.predict.dto.UserRequestDto;
 import digital.coin.predict.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +25,9 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public User getUser(OAuth2User oAuth2User){
-        return userRepository.findByEmail(oAuth2User.getAttribute("email")).orElseThrow();
-    }
+//    public User getUser(OAuth2User oAuth2User){
+//        return userRepository.findByEmail(oAuth2User.getAttribute("email")).orElseThrow();
+//    }
 
     public User updateUser(String email, UserRequestDto userRequestDto) {
         Optional<User> user = userRepository.findByEmail(email);
