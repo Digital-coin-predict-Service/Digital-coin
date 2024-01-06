@@ -1,10 +1,7 @@
 package digital.coin.predict.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +13,10 @@ import java.util.List;
 @Builder
 public class User extends BaseEntity {
     @Id
-    @Column(name = "email")
+    @Column(name = "user_email")
     private String email;
 
     private String provider;
-
-//    @OneToMany(mappedBy = "user")
-//    private List<Favorite> favorites = new ArrayList<>();
 
     @Enumerated
     private Role role;
