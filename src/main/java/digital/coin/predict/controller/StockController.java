@@ -5,7 +5,6 @@ import digital.coin.predict.dto.StockRequestDto;
 import digital.coin.predict.dto.StockResponseDto;
 import digital.coin.predict.service.StockService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -100,7 +99,7 @@ public class StockController {
     @GetMapping("/new")
     public String addView(@ModelAttribute("stockRequestDto") StockRequestDto stockRequestDto) {
         System.out.println(123);
-        return "save";
+        return "stockJoin";
     }
 
     @PostMapping("/new")

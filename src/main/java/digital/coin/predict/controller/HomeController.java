@@ -1,34 +1,35 @@
 package digital.coin.predict.controller;
 
 import digital.coin.predict.domain.Stock;
+import digital.coin.predict.dto.StockRequestDto;
 import digital.coin.predict.service.StockService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
     private final StockService stockService;
+
+//    @GetMapping("/")
+//    public String home(@ModelAttribute("stockRequestDto") StockRequestDto stockRequestDto) {
+//        return "home";
+//    }
+
     @GetMapping("/")
-    public String homeViewer(Model model){
+    public String stocksViewer(Model model, HttpSession httpSession) {
         List<Stock> stocks = stockService.findAll();
 
         model.addAttribute("stocks", stocks);
+        model.addAttribute("userName", httpSession.getAttribute("userName"));
 
-        return "home";
+        return "stockView";
     }
-
-//    @GetMapping("/new")
-//    public String addView() {
-//        System.out.println(123);
-//        return "save";
-//    }
 
 }

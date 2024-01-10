@@ -9,11 +9,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 public class UserResponseDto {
-    private String email;
+    private String name;
 
     private LocalDateTime created_at;
 
     private LocalDateTime update_at;
-
-    private Role role;
 }

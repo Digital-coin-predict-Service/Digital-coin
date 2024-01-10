@@ -34,8 +34,8 @@ public class UserController {
         List<UserResponseDto> userResponseDtoList = new ArrayList<>(users.size());
 
         for (User user : users) {
-            userResponseDto = new UserResponseDto(user.getEmail(), user.getCreate_at(),
-                    user.getUpdate_at(), user.getRole());
+            userResponseDto = new UserResponseDto(user.getUserName(), user.getCreate_at(),
+                    user.getUpdate_at());
 
             userResponseDtoList.add(userResponseDto);
         }
@@ -52,8 +52,8 @@ public class UserController {
 
         User user = result.get();
 
-        return ResponseEntity.ok(new UserResponseDto(user.getEmail(), user.getCreate_at(),
-                user.getUpdate_at(), user.getRole()));
+        return ResponseEntity.ok(new UserResponseDto(user.getUserName(), user.getCreate_at(),
+                user.getUpdate_at()));
     }
 
 //    @PostMapping("/update")
