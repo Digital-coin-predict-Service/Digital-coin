@@ -24,11 +24,11 @@ public class HomeController {
 //    }
 
     @GetMapping("/")
-    public String stocksViewer(Model model, HttpSession httpSession, HttpServletRequest httpServletRequest) {
+    public String stocksViewer(Model model) {
         List<Stock> stocks = stockService.findAll();
 
         model.addAttribute("stocks", stocks);
-        model.addAttribute("userName", httpSession.getAttribute("userName"));
+//        model.addAttribute("userName", httpSession.getAttribute("userName"));
 
         return "stockView";
     }
