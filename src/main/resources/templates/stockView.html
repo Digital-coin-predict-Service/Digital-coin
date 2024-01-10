@@ -1,75 +1,129 @@
 <!-- stocks.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-    <meta charset="UTF-8"/>
+  <head>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <meta charset="UTF-8" />
     <title th:text="${pageTitle}">Default Title</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-<div class="container-xxl">
-    <div class="col-9" id="leftColumn">
-        <p class="fancy-text" id="selectedStockText" th:text="'종목을 선택하세요'"></p>
-        <canvas class="graph-container" id="myChart"></canvas>
-    </div>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand">황금알을 낳는 거위</a>
+          <div class="d-flex">
+            <button class="btn btn-dark">로그인</button>
+            <button class="btn btn-light">회원가입</button>
+          </div>
+        </div>
+      </nav>
+      <div class="row">
+        <div class="col-9"></div>
+        <div class="col-3"></div>
+      </div>
+      <div class="row">
+        <div class="col-9" id="leftColumn">
+          <h4 class="card-header">종목을 선택하세요</h4>
+          <div class="card text-center">
+            <canvas class="graph-container" id="myChart"></canvas>
+          </div>
+        </div>
 
-    <div class="col-3">
-        <div class="right-column-heading">종목</div>
+        <div class="col-3">
+          <div>
+            <h3>종목</h3>
+          </div>
 
-        <button th:each="stock : ${stocks}" class="stock-item" th:onclick="handleStockClick([[${stock}]])">
+          <button
+            th:each="stock : ${stocks}"
+            class="btn btn-light w-100"
+            th:onclick="handleStockClick([[${stock}]])"
+          >
             <div class="stock-details">
-                <div class="stock-name" th:text="${stock.name}"></div>
-                <div class="stock-price" th:text="${stock.latestPrice} + '원'"></div>
-                <div class="rate" th:text="${stock.errorRate} + '%'"></div>
+              <div class="stock-name" th:text="${stock.name}"></div>
+              <div
+                class="stock-price"
+                th:text="${stock.latestPrice} + '원'"
+              ></div>
+              <div class="rate" th:text="${stock.errorRate} + '%'"></div>
             </div>
-        </button>
+          </button>
+        </div>
+      </div>
     </div>
-</div>
 
-<script th:inline="javascript">
-    var myChart;
+    <script th:inline="javascript">
+      var myChart;
 
-    function handleStockClick(stock) {
+      function handleStockClick(stock) {
         if (myChart) {
-            myChart.destroy();
+          myChart.destroy();
         }
 
-        fetch('stock/' + stock.name)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Network response was not ok: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(jsonData => {
-                stockData = jsonData;
-                const ctx = document.getElementById('myChart').getContext('2d');
-                myChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: ['-9', '-8', '-7', '-6', '-5', '-4', '-3', '-2', '-1', '0', '+1', '+2', '+3'],
-                        datasets: [{
-                            label: 'Price of ' + stock.name,
-                            data: jsonData,
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                suggestedMin: Math.min(...jsonData),
-                                suggestedMax: Math.max(...jsonData),
-                            }
-                        }
-                    }
-                });
-                var selectedStockText = document.getElementById('selectedStockText');
-                selectedStockText.style.display = 'none';
-            })
-            .catch(error => console.error('파일을 읽는 중 오류 발생:', error));
-    }
-</script>
-</body>
+        fetch("stock/" + stock.name)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(
+                `Network response was not ok: ${response.status}`
+              );
+            }
+            return response.json();
+          })
+          .then((jsonData) => {
+            stockData = jsonData;
+            const ctx = document.getElementById("myChart").getContext("2d");
+            myChart = new Chart(ctx, {
+              type: "line",
+              data: {
+                labels: [
+                  "-9",
+                  "-8",
+                  "-7",
+                  "-6",
+                  "-5",
+                  "-4",
+                  "-3",
+                  "-2",
+                  "-1",
+                  "0",
+                  "+1",
+                  "+2",
+                  "+3",
+                ],
+                datasets: [
+                  {
+                    label: "Price of " + stock.name,
+                    data: jsonData,
+                    borderWidth: 1,
+                  },
+                ],
+              },
+              options: {
+                scales: {
+                  y: {
+                    suggestedMin: Math.min(...jsonData),
+                    suggestedMax: Math.max(...jsonData),
+                  },
+                },
+              },
+            });
+            var selectedStockText =
+              document.getElementById("selectedStockText");
+            selectedStockText.style.display = "none";
+          })
+          .catch((error) => console.error("파일을 읽는 중 오류 발생:", error));
+      }
+    </script>
+  </body>
 </html>
