@@ -3,6 +3,7 @@ package digital.coin.predict.controller;
 import digital.coin.predict.domain.Favorite;
 import digital.coin.predict.dto.FavoriteResponseDto;
 import digital.coin.predict.service.FavoriteService;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class FavoriteController {
         List<FavoriteResponseDto> favoriteResponseDtos = new ArrayList<>(favorites.size());
 
         for (Favorite favorite : favorites) {
-            favoriteResponseDtos.add(new FavoriteResponseDto(favorite.getId(), favorite.getUser().getEmail(), favorite.getStock().getId(), favorite.getStock().getName()));
+            favoriteResponseDtos.add(new FavoriteResponseDto(favorite.getId(), favorite.getUser().getUserName(), favorite.getStock().getId(), favorite.getStock().getName()));
         }
 
         return ResponseEntity.ok(favoriteResponseDtos);

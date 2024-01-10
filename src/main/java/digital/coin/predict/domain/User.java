@@ -13,17 +13,17 @@ import java.util.List;
 @Builder
 public class User extends BaseEntity {
     @Id
-    @Column(name = "user_email")
-    private String email;
+    @GeneratedValue
+    private Long id;
 
-    private String provider;
+    private String userName;
 
-    @Enumerated
-    private Role role;
-
-    public User updateUser(String email, Role role) {
-        this.email = email;
-        this.role = role;
+    public User updateUser(String email) {
+        this.userName = userName;
         return this;
+    }
+
+    public User(String userName) {
+        this.userName = userName;
     }
 }

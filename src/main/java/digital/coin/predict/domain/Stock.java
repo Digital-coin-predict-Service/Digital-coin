@@ -21,7 +21,6 @@ public class Stock extends BaseEntity {
 
     private String name;
 
-    //json file path
     private String path;
 
     private int latestPrice;

@@ -49,8 +49,8 @@ public class FavoriteService {
         return favoriteRepository.findAllByStock(result.get());
     }
 
-    public List<Favorite> findAllByUserId(String email) {
-        Optional<User> result = userRepository.findByEmail(email);
+    public List<Favorite> findAllByUserId(String name) {
+        Optional<User> result = userRepository.findByUserName(name);
 
         if (result.isEmpty())
             return null;
