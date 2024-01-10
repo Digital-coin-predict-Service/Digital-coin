@@ -3,6 +3,7 @@ package digital.coin.predict.controller;
 import digital.coin.predict.domain.Stock;
 import digital.coin.predict.dto.StockRequestDto;
 import digital.coin.predict.service.StockService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,7 @@ public class HomeController {
 //    }
 
     @GetMapping("/")
-    public String stocksViewer(Model model, HttpSession httpSession) {
+    public String stocksViewer(Model model, HttpSession httpSession, HttpServletRequest httpServletRequest) {
         List<Stock> stocks = stockService.findAll();
 
         model.addAttribute("stocks", stocks);

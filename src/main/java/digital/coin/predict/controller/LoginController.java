@@ -33,9 +33,12 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String userLogin(@ModelAttribute("userRequestDto") UserRequestDto userRequestDto, HttpSession httpSession) {
+    public String userLogin(@ModelAttribute("userRequestDto") UserRequestDto userRequestDto, HttpServletRequest request) {
         if (userService.userExists(userRequestDto.getName())) {
+            HttpSession httpSession = request.getSession(true);
             httpSession.setAttribute("userName", userRequestDto.getName());
+            httpSession.setMaxInactiveInterval(1800);
+
             return "redirect:/";
         }
         return "1";
@@ -43,7 +46,6 @@ public class LoginController {
 
     @GetMapping("/logout")
     public String userLogOut() {
-
         return "logout";
     }
 
