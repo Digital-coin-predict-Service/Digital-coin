@@ -23,8 +23,11 @@
         <div class="container-fluid">
           <a class="navbar-brand">황금알을 낳는 거위</a>
           <div class="d-flex">
-            <button class="btn btn-dark">로그인</button>
-            <button class="btn btn-light">회원가입</button>
+            <button class="btn btn-dark" th:if="${login == false}" th:onclick="moveLogin()">로그인</button>
+            <button class="btn btn-light" th:if="${login == false}" th:onclick="moveRegister()">회원가입</button>
+            <form th:action="@{/logout}" method="post">
+              <button class="btn btn-dark" th:if="${login == true}" th:onclick="moveLogout()">로그아웃</button>
+            </form>
           </div>
         </div>
       </nav>
@@ -124,6 +127,20 @@
           })
           .catch((error) => console.error("파일을 읽는 중 오류 발생:", error));
       }
+    </script>
+
+    <script>
+        function moveLogin() {
+            location.href = "/login"
+        }
+
+        function moveRegister() {
+            location.href = "/join"
+        }
+
+        function moveLogout() {
+            location.href = "/logout"
+        }
     </script>
   </body>
 </html>

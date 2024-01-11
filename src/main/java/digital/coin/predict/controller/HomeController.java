@@ -24,13 +24,20 @@ public class HomeController {
 //    }
 
     @GetMapping("/")
-    public String stocksViewer(Model model) {
+    public String stocksViewer(Model model, HttpServletRequest request) {
         List<Stock> stocks = stockService.findAll();
 
-        model.addAttribute("stocks", stocks);
-//        model.addAttribute("userName", httpSession.getAttribute("userName"));
+        HttpSession httpSession = request.getSession(false);
 
-        return "stockView";
+        if (httpSession == null) {
+            model.addAttribute("stocks", stocks);
+            model.addAttribute("login", false);
+            return "stockView";
+        } else {
+            model.addAttribute("stocks", stocks);
+            model.addAttribute("login", true);
+            return "stockView";
+        }
     }
 
 }
