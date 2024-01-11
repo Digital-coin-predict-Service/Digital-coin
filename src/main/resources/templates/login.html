@@ -10,7 +10,7 @@
 
 <h2>Login Form</h2>
 
-<form th:action="@{/login}" th:object="${userRequestDto}" method="post">
+<form action="/login" th:object="${userRequestDto}" method="post">
     <label for="username">사용자 이름:</label>
     <input type="text" id="username" th:field="*{name}" required>
     <br>
