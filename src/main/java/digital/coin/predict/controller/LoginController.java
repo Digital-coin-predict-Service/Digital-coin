@@ -51,7 +51,6 @@ public class LoginController {
 
     @PostMapping("/logout")
     public String userLogOut(HttpServletRequest request) {
-
         HttpSession httpSession = request.getSession(false);
         String userName = (String)httpSession.getAttribute("userName");
         System.out.println(userName);
@@ -59,10 +58,8 @@ public class LoginController {
         if (userName != null) {
             httpSession.removeAttribute("userName");
             httpSession.invalidate();
-
-            return "redirect:/";
         }
 
-        return "1";
+        return "redirect:/";
     }
 }

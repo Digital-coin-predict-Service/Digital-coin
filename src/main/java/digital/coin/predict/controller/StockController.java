@@ -129,7 +129,7 @@ public class StockController {
 
         if (httpSession == null) {
             try {
-                JsonNode jsonNode = objectMapper.readTree(new File("E:\\Digital coin\\src\\main\\resources\\static\\" + name + ".json"));
+                JsonNode jsonNode = objectMapper.readTree(new File("src\\main\\resources\\static\\" + name + ".json"));
 
                 for (int i = 0; i < jsonNode.size() - 2; i++) {
                     stockPrices.add(jsonNode.get(i).asDouble());
@@ -144,7 +144,7 @@ public class StockController {
         }
 
         try {
-            JsonNode jsonNode = objectMapper.readTree(new File("E:\\Digital coin\\src\\main\\resources\\static\\" + name + ".json"));
+            JsonNode jsonNode = objectMapper.readTree(new File("src\\main\\resources\\static\\" + name + ".json"));
 
             for (JsonNode price : jsonNode) {
                 stockPrices.add(price.asDouble());
