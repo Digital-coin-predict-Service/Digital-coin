@@ -1,6 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+            crossorigin="anonymous"
+    />
+    <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+            crossorigin="anonymous"
+    ></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
@@ -17,6 +28,7 @@
         .login-container {
             background-color: #ffffff;
             padding: 20px;
+            height: 300px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
@@ -29,6 +41,8 @@
         .login-container input {
             width: 100%;
             padding: 8px;
+            position: relative;
+            top: 30px;
             margin-bottom: 16px;
             box-sizing: border-box;
         }
@@ -36,19 +50,26 @@
         .login-container button {
             width: 100%;
             padding: 10px;
+            position: relative;
+            top: 100px;
             background-color: #007bff;
             color: #fff;
             border: none;
-            border-radius: 4px;
+            border-radius: 12px;
             cursor: pointer;
         }
     </style>
 </head>
 <body>
-<div class="login-container">
-    <label for="username">이름:</label>
-    <input type="text" id="username" name="username" required>
-    <button type="submit">로그인</button>
-</div>
+<form action="/login" th:object="${userRequestDto}" method="post">
+    <div class="login-container">
+        <label for="username" class="fs-2 fw-normal text-center">이름을 입력하세요</label>
+        <input type="text" placeholder="Username" id="username" name="username" th:field="*{name}" required>
+        <div th:if="${isValid == false}" id="login-error" class="card"> hello </div>
+        <button class="btn btn-success" type="submit">Login</button>
+    </div>
+</form>
+<script>
+</script>
 </body>
 </html>

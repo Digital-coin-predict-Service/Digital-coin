@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -24,20 +25,20 @@ public class HomeController {
 //    }
 
     @GetMapping("/")
-    public String stocksViewer(Model model, HttpServletRequest request) {
+    public String stocksViewer(Model model, HttpServletRequest request, @CookieValue(value = "userName", required = false) String userName) {
         List<Stock> stocks = stockService.findAll();
+
+        model.addAttribute("stocks", stocks);
 
         HttpSession httpSession = request.getSession(false);
 
-        if (httpSession == null) {
-            model.addAttribute("stocks", stocks);
+        if (httpSession == null || userName == null) {
             model.addAttribute("login", false);
-            return "stockView";
         } else {
-            model.addAttribute("stocks", stocks);
             model.addAttribute("login", true);
-            return "stockView";
         }
+
+        return "stockView";
     }
 
 }
