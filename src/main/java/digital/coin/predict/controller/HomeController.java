@@ -1,16 +1,19 @@
 package digital.coin.predict.controller;
 
 import digital.coin.predict.domain.Stock;
+import digital.coin.predict.dto.FavoriteResponseDto;
 import digital.coin.predict.dto.StockRequestDto;
 import digital.coin.predict.service.StockService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 

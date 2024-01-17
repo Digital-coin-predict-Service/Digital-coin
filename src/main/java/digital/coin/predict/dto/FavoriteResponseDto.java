@@ -9,8 +9,11 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 public class FavoriteResponseDto {
-    private Long favorite_id;
-    private String email;
-    private Long stock_id;
-    private String stock_name;
+    private Long favoriteId;
+
+    private Long userId;
+    private String userName;
+
+    private Long stockId;
+    private String stockName;
 }

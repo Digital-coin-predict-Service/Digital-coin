@@ -21,18 +21,16 @@ public class FavoriteService {
     private final StockRepository stockRepository;
     private final FavoriteRepository favoriteRepository;
 
-//    public User getUser(OAuth2User oAuth2User){
-//        return userRepository.findByEmail(oAuth2User.getAttribute("email")).orElseThrow();
-//    }
+    public Boolean addFavorite(String userName, String stockName){
+        Optional<User> userResult = userRepository.findByUserName(userName);
+        Optional<Stock> stockResult = stockRepository.findByName(stockName);
 
-    public Boolean addFavorite(User user, Long id){
-        Optional<Stock> optionalStock = stockRepository.findById(id);
-
-        if(optionalStock.isEmpty()) {
+        if(stockResult.isEmpty() || userResult.isEmpty())
             return false;
-        }
 
-        Stock stock = optionalStock.get();
+        Stock stock = stockResult.get();
+        User user = userResult.get();
+
         Favorite favorite = Favorite.builder().stock(stock).user(user).build();
         favoriteRepository.save(favorite);
 
@@ -49,7 +47,7 @@ public class FavoriteService {
         return favoriteRepository.findAllByStock(result.get());
     }
 
-    public List<Favorite> findAllByUserId(String name) {
+    public List<Favorite> findAllByUserName(String name) {
         Optional<User> result = userRepository.findByUserName(name);
 
         if (result.isEmpty())

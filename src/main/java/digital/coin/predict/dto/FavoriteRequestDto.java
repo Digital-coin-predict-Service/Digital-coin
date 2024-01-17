@@ -4,6 +4,8 @@ import lombok.Getter;
 
 @Getter
 public class FavoriteRequestDto {
-    private Long id;
-    private String name;
+    private Long userId;
+    private Long stockId;
+    private String userName;
+    private String stockName;
 }

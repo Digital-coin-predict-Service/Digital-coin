@@ -1,6 +1,7 @@
 package digital.coin.predict.controller;
 
 import digital.coin.predict.domain.Favorite;
+import digital.coin.predict.domain.User;
 import digital.coin.predict.dto.FavoriteResponseDto;
 import digital.coin.predict.service.FavoriteService;
 import lombok.NoArgsConstructor;
@@ -27,21 +28,26 @@ public class FavoriteController {
 //        return ResponseEntity.ok().build();
 //    }
 
-    @GetMapping("/list/stock")
-    public ResponseEntity<List<FavoriteResponseDto>> findAllByStockId(@RequestParam(value = "s") Long id) {
-        List<Favorite> favorites = favoriteService.findAllByStockId(id);
+    @PostMapping("/{stockName}")
+    public void addFavorite(@CookieValue(value = "userName") String userName, @PathVariable String stockName) {
+        favoriteService.addFavorite(userName, stockName);
+    }
 
-        if (favorites == null)
-            return ResponseEntity.notFound().build();
+    @GetMapping("/all")
+    public ResponseEntity<List<FavoriteResponseDto>> findAllByUserName(@CookieValue(value = "userName") String userName) {
+        List<Favorite> result = favoriteService.findAllByUserName(userName);
 
-        List<FavoriteResponseDto> favoriteResponseDtos = new ArrayList<>(favorites.size());
+        List<FavoriteResponseDto> favoriteResponseDtos = new ArrayList<>(result.size());
 
-        for (Favorite favorite : favorites) {
-            favoriteResponseDtos.add(new FavoriteResponseDto(favorite.getId(), favorite.getUser().getUserName(), favorite.getStock().getId(), favorite.getStock().getName()));
+        for (Favorite favorite :
+                result) {
+            favoriteResponseDtos.add(new FavoriteResponseDto(favorite.getId(), favorite.getUser().getId(),
+                    favorite.getUser().getUserName(), favorite.getStock().getId(), favorite.getStock().getName()));
         }
 
         return ResponseEntity.ok(favoriteResponseDtos);
     }
+
 
 //    @GetMapping("/list/user")
 //    public ResponseEntity<List<FavoriteResponseDto>> findAllByUserId(@AuthenticationPrincipal OAuth2User oAuth2User) {
