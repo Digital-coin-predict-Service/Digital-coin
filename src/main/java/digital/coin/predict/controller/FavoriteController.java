@@ -1,18 +1,22 @@
 package digital.coin.predict.controller;
 
 import digital.coin.predict.domain.Favorite;
+import digital.coin.predict.domain.Stock;
 import digital.coin.predict.domain.User;
 import digital.coin.predict.dto.FavoriteResponseDto;
+import digital.coin.predict.dto.StockRequestDto;
 import digital.coin.predict.service.FavoriteService;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/favorite")
 public class FavoriteController {
@@ -28,7 +32,7 @@ public class FavoriteController {
 //        return ResponseEntity.ok().build();
 //    }
 
-    @PostMapping("/{stockName}")
+    @GetMapping("/{stockName}")
     public void addFavorite(@CookieValue(value = "userName") String userName, @PathVariable String stockName) {
         favoriteService.addFavorite(userName, stockName);
     }

@@ -1,6 +1,7 @@
 package digital.coin.predict.controller;
 
 import digital.coin.predict.dto.UserRequestDto;
+import digital.coin.predict.service.SessionService;
 import digital.coin.predict.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import static org.hibernate.query.sqm.tree.SqmNode.log;
 @RequiredArgsConstructor
 public class LoginController {
     final UserService userService;
+    final SessionService sessionService;
     private boolean isValid = true;
 
     @GetMapping("/join")
@@ -54,6 +56,8 @@ public class LoginController {
         httpSession.setAttribute("userName", userRequestDto.getName());
         httpSession.setMaxInactiveInterval(1800);
 
+        sessionService.saveSession(httpSession.getId());
+
         Cookie cookie = new Cookie("userName", userRequestDto.getName());
         cookie.setAttribute("sessionId", httpSession.getId());
         response.addCookie(cookie);
@@ -78,6 +82,9 @@ public class LoginController {
             Cookie logoutCookie = new Cookie("userName", null);
             logoutCookie.setAttribute("sessionId", null);
             logoutCookie.setMaxAge(0);
+
+            sessionService.deleteSession(httpSession.getId());
+
             httpSession.removeAttribute("userName");
             httpSession.invalidate();
 

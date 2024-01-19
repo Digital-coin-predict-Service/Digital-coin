@@ -2,25 +2,55 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Logout Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+
+    .login-container {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-container label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .login-container input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-
-<h2>Welcome, User!</h2>
-
-<!-- Logout button form -->
-<form id="logoutForm" action="/logout" method="post">
-  <button type="submit">Logout</button>
-</form>
-
-<script>
-  // Add JavaScript to submit the form when the button is clicked
-  document.getElementById('logoutForm').addEventListener('submit', function (event) {
-    event.preventDefault(); // Prevent the default form submission
-    // Perform any additional logic before submitting (if needed)
-    this.submit(); // Submit the form
-  });
-</script>
-
+<div class="login-container">
+  <form th:action="@{'/' + ${stockName}}" method="post" th:object="${stockRequestDto}">
+    <label for="username">주식 이름:</label>
+    <input type="text" id="username" name="username" th:field="*{name}" required>
+    <button type="submit">등록</button>
+  </form>
+</div>
 </body>
 </html>

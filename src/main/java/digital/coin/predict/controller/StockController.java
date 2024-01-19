@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.coin.predict.domain.Stock;
 import digital.coin.predict.dto.StockRequestDto;
 import digital.coin.predict.dto.StockResponseDto;
+import digital.coin.predict.service.SessionService;
 import digital.coin.predict.service.StockService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -26,6 +27,7 @@ import java.util.Optional;
 @RequestMapping("/stock")
 public class StockController {
     private final StockService stockService;
+    private final SessionService sessionService;
 
     @GetMapping("/all")
     public ResponseEntity<List<StockResponseDto>> findAll() {
@@ -105,7 +107,6 @@ public class StockController {
 
     @GetMapping("/new")
     public String addView(@ModelAttribute("stockRequestDto") StockRequestDto stockRequestDto) {
-        System.out.println(123);
         return "stockJoin";
     }
 
