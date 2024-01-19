@@ -6,7 +6,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
 public class Prediction {
-    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 * * * * ?", zone = "Asia/Seoul")
     public void executePrediction() {
         WebClient webClient = WebClient.builder().build();
         String url = "http://127.0.0.1:5000/prediction";

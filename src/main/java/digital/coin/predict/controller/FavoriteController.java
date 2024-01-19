@@ -32,7 +32,7 @@ public class FavoriteController {
 //        return ResponseEntity.ok().build();
 //    }
 
-    @GetMapping("/{stockName}")
+    @PostMapping("/{stockName}")
     public void addFavorite(@CookieValue(value = "userName") String userName, @PathVariable String stockName) {
         favoriteService.addFavorite(userName, stockName);
     }
@@ -50,6 +50,11 @@ public class FavoriteController {
         }
 
         return ResponseEntity.ok(favoriteResponseDtos);
+    }
+
+    @DeleteMapping("/{stockName}")
+    public void deleteFavorite(@CookieValue(value = "userName") String userName, @PathVariable String stockName) {
+        favoriteService.deleteFavorite(userName, stockName);
     }
 
 

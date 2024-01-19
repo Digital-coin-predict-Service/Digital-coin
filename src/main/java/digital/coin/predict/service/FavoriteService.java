@@ -55,6 +55,16 @@ public class FavoriteService {
         return favoriteRepository.findAllByUser(result.get());
     }
 
+    public boolean deleteFavorite(String userName, String stockName) {
+        Optional<User> userResult = userRepository.findByUserName(userName);
+        Optional<Stock> stockResult = stockRepository.findByName(stockName);
+
+        if (userResult.isEmpty() || stockResult.isEmpty())
+            return false;
+
+        return favoriteRepository.deleteByUserAndStock(userResult.get(), stockResult.get());
+    }
+
 //    public Boolean deleteFavorite(User user, Long id) {
 //        Optional<Stock> result = stockRepository.findById(id);
 //

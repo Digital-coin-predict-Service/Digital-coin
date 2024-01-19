@@ -87,25 +87,13 @@
             return response.json();
           })
           .then((jsonData) => {
-            stockData = jsonData;
             const ctx = document.getElementById("myChart").getContext("2d");
             myChart = new Chart(ctx, {
               type: "line",
               data: {
                 labels: [
-                  "-9",
-                  "-8",
-                  "-7",
-                  "-6",
-                  "-5",
-                  "-4",
-                  "-3",
-                  "-2",
-                  "-1",
-                  "0",
-                  "+1",
-                  "+2",
-                  "+3",
+                        -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0,
+                        1, 2, 3, 4, 5, 6, 7, 8, 9, 10
                 ],
                 datasets: [
                   {
@@ -117,11 +105,23 @@
               },
               options: {
                 scales: {
+                  x: {
+                    title: {
+                      display: true,
+                      text: 'Minute'
+                    }
+                  },
                   y: {
                     suggestedMin: Math.min(...jsonData),
                     suggestedMax: Math.max(...jsonData),
+                    title: {
+                      display: true,
+                      text: 'Price'
+                    }
                   },
                 },
+                responsive: true,
+                maintainAspectRatio: false,
               },
             });
             var selectedStockText =

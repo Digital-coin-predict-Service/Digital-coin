@@ -132,7 +132,7 @@ public class StockController {
             try {
                 JsonNode jsonNode = objectMapper.readTree(new File("src\\main\\resources\\static\\" + name + ".json"));
 
-                for (int i = 0; i < jsonNode.size() - 2; i++) {
+                for (int i = 0; i < jsonNode.size() - 5; i++) {
                     stockPrices.add(jsonNode.get(i).asDouble());
                 }
                 System.out.println(stockPrices);

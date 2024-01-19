@@ -20,7 +20,6 @@ import static org.hibernate.query.sqm.tree.SqmNode.log;
 public class LoginController {
     final UserService userService;
     final SessionService sessionService;
-    private boolean isValid = true;
 
     @GetMapping("/join")
     public String userJoinView(@ModelAttribute("userRequestDto") UserRequestDto userRequestDto) {
@@ -39,18 +38,14 @@ public class LoginController {
     @GetMapping("/login")
     public String userLoginView(@ModelAttribute("userRequestDto") UserRequestDto userRequestDto, Model model) {
 //        System.out.println(isValid);
-        model.addAttribute("isValid", isValid);
 
         return "login";
     }
 
     @PostMapping("/login")
     public String userLogin(@ModelAttribute("userRequestDto") UserRequestDto userRequestDto, HttpServletRequest request, HttpServletResponse response) {
-        if (!userService.userExists(userRequestDto.getName())) {
-            isValid = false;
-
+        if (!userService.userExists(userRequestDto.getName()))
             return "login";
-        }
 
         HttpSession httpSession = request.getSession(true);
         httpSession.setAttribute("userName", userRequestDto.getName());
@@ -62,14 +57,7 @@ public class LoginController {
         cookie.setAttribute("sessionId", httpSession.getId());
         response.addCookie(cookie);
 
-        isValid = true;
-
         return "redirect:/";
-    }
-
-    @GetMapping("/logout")
-    public String userLogOut() {
-        return "logout";
     }
 
     @PostMapping("/logout")
