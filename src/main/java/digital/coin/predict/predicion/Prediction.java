@@ -11,6 +11,6 @@ public class Prediction {
         WebClient webClient = WebClient.builder().build();
         String url = "http://127.0.0.1:5000/prediction";
 
-        webClient.get().uri(url).retrieve().bodyToMono(String.class).block();
+        webClient.get().uri(url).retrieve().bodyToMono(Void.class).block();
     }
 }

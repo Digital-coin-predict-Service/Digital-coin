@@ -26,7 +26,6 @@
             <button class="btn btn-dark" th:if="${login == false}" th:onclick="moveLogin()">로그인</button>
             <button class="btn btn-light" th:if="${login == false}" th:onclick="moveRegister()">회원가입</button>
             <div style="right:10px; color: aqua">
-
             </div>
             <form th:action="@{/logout}" method="post">
               <button class="btn btn-dark" th:if="${login == true}" th:onclick="moveLogout()">로그아웃</button>
@@ -88,6 +87,7 @@
           })
           .then((jsonData) => {
             const ctx = document.getElementById("myChart").getContext("2d");
+
             myChart = new Chart(ctx, {
               type: "line",
               data: {
