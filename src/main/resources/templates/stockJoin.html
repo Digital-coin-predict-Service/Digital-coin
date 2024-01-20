@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Stock Save</title>
-</head>
-<body>
-<form method="post" action="/stock/new" th:object="${stockRequestDto}">
-  <label for="name">Name:</label>
-  <input type="text" id="name" th:field="*{name}" required>
-  <button type="submit">Save</button>
-</form>
-</body>
+  <head>
+    <header th:replace="common/fragments/header :: HeaderFragment"></header>
+    <title>Stock Save</title>
+  </head>
+  <body>
+    <form method="post" action="/stock/new" th:object="${stockRequestDto}">
+      <label for="name">Name:</label>
+      <input type="text" id="name" th:field="*{name}" required />
+      <button type="submit">Save</button>
+    </form>
+  </body>
 </html>
