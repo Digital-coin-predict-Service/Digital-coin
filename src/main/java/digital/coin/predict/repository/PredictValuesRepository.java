@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PredictValuesRepository extends JpaRepository<PredictValues, Integer> {
-    List<PredictValues> findAllByCoinPredictId(Integer coinPredictId);
+public interface PredictValuesRepository extends JpaRepository<PredictValues, Long> {
+    List<PredictValues> findAllByCoinPredictIdOrderByStepAsc(Long coinPredictId);
 }

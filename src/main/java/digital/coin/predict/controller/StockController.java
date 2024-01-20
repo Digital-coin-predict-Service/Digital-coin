@@ -2,9 +2,13 @@ package digital.coin.predict.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import digital.coin.predict.domain.CoinPredict;
+import digital.coin.predict.domain.PredictValues;
 import digital.coin.predict.domain.Stock;
 import digital.coin.predict.dto.StockRequestDto;
 import digital.coin.predict.dto.StockResponseDto;
+import digital.coin.predict.service.CoinPredictService;
+import digital.coin.predict.service.PredictValuesService;
 import digital.coin.predict.service.SessionService;
 import digital.coin.predict.service.StockService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,6 +32,8 @@ import java.util.Optional;
 public class StockController {
     private final StockService stockService;
     private final SessionService sessionService;
+    private final CoinPredictService coinPredictService;
+    private final PredictValuesService predictValuesService;
 
     @GetMapping("/all")
     public ResponseEntity<List<StockResponseDto>> findAll() {
@@ -124,42 +130,38 @@ public class StockController {
 
     @GetMapping("/{name}")
     public ResponseEntity<List<?>> getStockPrice(@PathVariable String name, HttpServletRequest request) {
-        ObjectMapper objectMapper = new ObjectMapper();
         List<Double> stockPrices = new ArrayList<>();
 
         HttpSession httpSession = request.getSession(false);
-        System.out.println(httpSession);
+
+        Optional<Stock> stockResult = stockService.findByName(name);
+        Stock stock;
+
+        CoinPredict coinPredict;
+        List<PredictValues> predictValues;
+
+        if (stockResult.isEmpty())
+            return ResponseEntity.internalServerError().build();
+        else
+            stock = stockResult.get();
+
+        coinPredict = coinPredictService.findByCoinId(stock.getId());
+        predictValues = predictValuesService.findAllByCoinPredictId(coinPredict.getCoinId());
 
         if (httpSession == null) {
-
-
-            try {
-                JsonNode jsonNode = objectMapper.readTree(new File("src\\main\\resources\\static\\" + name + ".json"));
-
-                for (int i = 0; i < jsonNode.size() - 5; i++) {
-                    stockPrices.add(jsonNode.get(i).asDouble());
-                }
-                System.out.println(stockPrices);
-
-                return ResponseEntity.ok(stockPrices);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return ResponseEntity.badRequest().build();
+            for (int i = 0; i < predictValues.size() - 5; i++) {
+                stockPrices.add(predictValues.get(i).getValue());
             }
-        }
-
-        try {
-            JsonNode jsonNode = objectMapper.readTree(new File("src\\main\\resources\\static\\" + name + ".json"));
-
-            for (JsonNode price : jsonNode) {
-                stockPrices.add(price.asDouble());
-            }
-            System.out.println(stockPrices);
 
             return ResponseEntity.ok(stockPrices);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.notFound().build();
         }
+
+        for (PredictValues values :
+                predictValues) {
+            stockPrices.add(values.getValue());
+        }
+
+        return ResponseEntity.ok(stockPrices);
+
     }
 }

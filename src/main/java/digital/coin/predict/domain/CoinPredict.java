@@ -14,11 +14,11 @@ import java.time.LocalDateTime;
 public class CoinPredict {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    private Integer coinId;
+    private Long coinId;
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime predict_at;
+    private LocalDateTime predictAt;
 }

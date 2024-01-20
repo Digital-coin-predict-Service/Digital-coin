@@ -10,9 +10,9 @@ import lombok.RequiredArgsConstructor;
 public class PredictValues {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    private Integer coinPredictId;
+    private Long coinPredictId;
 
     private Double value;
 

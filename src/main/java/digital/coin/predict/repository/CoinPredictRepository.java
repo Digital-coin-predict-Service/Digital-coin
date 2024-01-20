@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CoinPredictRepository extends JpaRepository<CoinPredict, Integer> {
-    Optional<CoinPredict> findFirstByCoinIdOrderByPredict_at(Integer coinId);
+public interface CoinPredictRepository extends JpaRepository<CoinPredict, Long> {
+    Optional<CoinPredict> findFirstByCoinIdOrderByPredictAtDesc(Long coinId);
 }
