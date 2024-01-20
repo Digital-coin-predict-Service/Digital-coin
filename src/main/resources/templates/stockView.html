@@ -1,6 +1,6 @@
 <!-- stocks.html -->
 <!DOCTYPE html>
-<html data-theme="emerald" xmlns:th="http://www.thymeleaf.org">
+<html data-theme="autumn" xmlns:th="http://www.thymeleaf.org">
   <head>
     <header th:replace="header :: HeaderFragment"></header>
     <title th:text="${pageTitle}">Default Title</title>
@@ -9,20 +9,21 @@
   <body>
     <div class="container h-screen m-auto">
       <div class="flex flex-col">
-        <div class="basis-1/12 navbar bg-base-100 shadow-xl rounded-box">
+        <div class="h-4"></div>
+        <div class="navbar bg-base-200 shadow-xl rounded-box">
           <div class="flex-1">
             <a class="btn btn-ghost text-xl">황알거</a>
           </div>
-          <div class="flex-none">
+          <div class="flex flex-row gap-3">
             <button
-              class="btn btn-dark"
+              class="btn btn-neutral"
               th:if="${login == false}"
               th:onclick="moveLogin()"
             >
               로그인
             </button>
             <button
-              class="btn btn-light"
+              class="btn btn-outline"
               th:if="${login == false}"
               th:onclick="moveRegister()"
             >
@@ -40,15 +41,29 @@
             </form>
           </div>
         </div>
-        <div class="flex flex-row basis-11/12">
-          <div class="basis-5/6 flex flex-col">
-            <div class="basis-1/12">
-              <h4 class="text-center">종목을 선택하세요</h4>
+        <div class="h-4"></div>
+        <div class="flex flex-row grow">
+          <div class="basis-9/12 flex flex-col">
+            <div class="basis-10/12">
+              <div class="w-full h-full p-10">
+                <div
+                  id="select-coin-hero"
+                  class="hero w-full h-full bg-base-200 rounded rounded-lg shadow shadow-lg"
+                >
+                  <div class="hero-content text-center">
+                    <div class="max-w-md">
+                      <h1 class="text-5xl font-bold">종목을 선택해보세요</h1>
+                      <p class="py-6">
+                        우량한 비트코인도, 영세한 알트코인도 가능성을 예측하고
+                        수익을 실현해보세요.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <canvas class="graph-container" id="myChart"> </canvas>
+              </div>
             </div>
-            <div class="basis-8/12">
-              <canvas class="graph-container" id="myChart"> </canvas>
-            </div>
-            <div class="basis-3/12">
+            <div class="basis-2/12">
               <div class="stats shadow">
                 <div class="stat">
                   <div class="stat-figure text-primary">
@@ -61,12 +76,13 @@
               </div>
             </div>
           </div>
-          <div class="basis-1/6 flex flex-col">
-            <div>
-              <h3>종목</h3>
+          <div class="divider lg:divider-horizontal"></div>
+          <div class="grow flex flex-col">
+            <div class="basis-1/12 text-center">
+              <span class="text-2xl">종목</span>
             </div>
-            <div>
-              <ul class="menu bg-base-200 w-56 rounded-box">
+            <div class="basis-11/12 overflow-y-auto border border-base-200">
+              <ul class="menu flex flex-col flex-warp">
                 <li
                   th:each="stock : ${stocks}"
                   th:onclick="handleStockClick([[${stock}]])"
@@ -109,6 +125,7 @@
             return response.json();
           })
           .then((jsonData) => {
+            document.getElementsByName("select-coin-hero").remove();
             const ctx = document.getElementById("myChart").getContext("2d");
 
             myChart = new Chart(ctx, {
