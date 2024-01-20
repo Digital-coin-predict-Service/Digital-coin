@@ -21,14 +21,14 @@ public class Stock extends BaseEntity {
 
     private String name;
 
-    private String path;
+    private String code;
 
-    private int latestPrice;
+    private Double latestPrice;
 
-    private int errorRate;
+    private Double errorRate;
 
-    public Stock(String name) {
+    public Stock(String name, String code) {
         this.name = name;
-        this.path = "E:/Digital coin/src/main/resources/static/" + name + ".json";
+        this.code = code;
     }
 }

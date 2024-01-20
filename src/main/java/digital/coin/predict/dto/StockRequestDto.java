@@ -10,5 +10,5 @@ import lombok.Setter;
 public class StockRequestDto {
     private Long id;
     private String name;
-    private String path;
+    private String code;
 }

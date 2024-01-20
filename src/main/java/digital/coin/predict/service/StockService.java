@@ -31,7 +31,7 @@ public class StockService {
         return stock.getId();
     }
 
-    public void updateStock(Long id, String name, String path) {
+    public void updateStock(Long id, String name, String code) {
         Optional<Stock> result = stockRepository.findById(id);
 
         if (result.isEmpty())
@@ -40,12 +40,12 @@ public class StockService {
         Stock stock = result.get();
 
         if (name == null) {
-            stock.setPath(path);
-        } else if (path == null) {
+            stock.setCode(code);
+        } else if (code == null) {
             stock.setName(name);
         } else {
             stock.setName(name);
-            stock.setPath(path);
+            stock.setCode(code);
         }
 
         stockRepository.save(stock);

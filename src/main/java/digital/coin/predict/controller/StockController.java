@@ -84,7 +84,7 @@ public class StockController {
 
     @PostMapping("/join")
     public ResponseEntity<Void> join(@RequestBody StockRequestDto stockRequestDto) {
-        Stock stock = new Stock(stockRequestDto.getName());
+        Stock stock = new Stock(stockRequestDto.getName(), stockRequestDto.getCode());
 
         stockService.join(stock);
 
@@ -93,27 +93,29 @@ public class StockController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updateStock(@PathVariable Long id, @RequestBody StockRequestDto stockRequestDto) {
-        stockService.updateStock(id, stockRequestDto.getName(), stockRequestDto.getPath());
+        stockService.updateStock(id, stockRequestDto.getName(), stockRequestDto.getCode());
 
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> deleteStock(@RequestParam(value = "v") Long id) {
-        stockService.deleteStock(id);
+//    @DeleteMapping("/delete")
+//    public ResponseEntity<Void> deleteStock(@RequestParam(value = "v") Long id) {
+//        stockService.deleteStock(id);
+//
+//        return ResponseEntity.ok().build();
+//    }
 
-        return ResponseEntity.ok().build();
-    }
+    @GetMapping("/new/{stockName}/{stockCode}")
+    public void addView(@PathVariable String stockName, @PathVariable String stockCode) {
+        Stock stock = new Stock(stockName, stockCode);
 
-    @GetMapping("/new")
-    public String addView(@ModelAttribute("stockRequestDto") StockRequestDto stockRequestDto) {
-        return "stockJoin";
+        stockService.join(stock);
     }
 
     @PostMapping("/new")
     public String addStock(@ModelAttribute("stockRequestDto") StockRequestDto stockRequestDto) {
         System.out.println(stockRequestDto.getName());
-        Stock stock = new Stock(stockRequestDto.getName());
+        Stock stock = new Stock(stockRequestDto.getName(), stockRequestDto.getCode());
 
         stockService.join(stock);
 
@@ -129,6 +131,8 @@ public class StockController {
         System.out.println(httpSession);
 
         if (httpSession == null) {
+
+
             try {
                 JsonNode jsonNode = objectMapper.readTree(new File("src\\main\\resources\\static\\" + name + ".json"));
 
@@ -140,7 +144,7 @@ public class StockController {
                 return ResponseEntity.ok(stockPrices);
             } catch (IOException e) {
                 e.printStackTrace();
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.badRequest().build();
             }
         }
 
