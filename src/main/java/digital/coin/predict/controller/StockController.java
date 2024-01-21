@@ -146,7 +146,7 @@ public class StockController {
             stock = stockResult.get();
 
         coinPredict = coinPredictService.findByCoinId(stock.getId());
-        predictValues = predictValuesService.findAllByCoinPredictId(coinPredict.getCoinId());
+        predictValues = predictValuesService.findAllByCoinPredictId(coinPredict.getId());
 
         if (httpSession == null) {
             for (int i = 0; i < predictValues.size() - 5; i++) {
@@ -159,7 +159,6 @@ public class StockController {
         for (PredictValues values :
                 predictValues) {
             stockPrices.add(values.getValue());
-            System.out.println(values.getValue());
         }
 
         return ResponseEntity.ok(stockPrices);
