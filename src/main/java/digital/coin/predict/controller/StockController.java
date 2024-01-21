@@ -159,6 +159,7 @@ public class StockController {
         for (PredictValues values :
                 predictValues) {
             stockPrices.add(values.getValue());
+            System.out.println(values.getValue());
         }
 
         return ResponseEntity.ok(stockPrices);
