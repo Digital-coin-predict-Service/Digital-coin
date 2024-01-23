@@ -23,7 +23,7 @@ public class SessionService {
         if (user.isEmpty())
             return false;
 
-        return sessionRepository.existsBySessionIdAndUser(sessionId, user.get());
+        return sessionRepository.existsBySessionIdAndUserId(sessionId, user.get().getId());
     }
 
     public void deleteSession(String sessionId, String userName) {
@@ -42,7 +42,7 @@ public class SessionService {
         if (user.isEmpty())
             return;
 
-        Session newSession = new Session(sessionId, user.get());
+        Session newSession = new Session(sessionId, user.get().getId());
 
         sessionRepository.save(newSession);
     }

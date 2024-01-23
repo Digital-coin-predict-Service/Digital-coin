@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SessionRepository extends JpaRepository<Session, String> {
-    boolean existsBySessionIdAndUser(String sessionId, User user);
+    boolean existsBySessionIdAndUserId(String sessionId, Long id);
 }

@@ -17,6 +17,5 @@ public class Session extends BaseEntity{
     @Id
     private String sessionId;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private User user;
+    private Long userId;
 }
