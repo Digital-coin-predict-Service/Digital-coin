@@ -98,12 +98,19 @@
             </div>
             <div class="basis-11/12 overflow-y-auto border border-base-200">
               <ul class="menu flex flex-col flex-warp">
-                <li
-                  th:each="stock : ${stocks}"
-                  th:onclick="handleStockClick([[${stock}]])"
-                >
-                  <a>
-                    <div class="stock-details">
+                <li th:each="stock : ${stocks}">
+                  <div class="stock-details flex w-full">
+                    <div
+                      class="basis-2"
+                      th:onclick="toggleFavorite([[${stock}]])"
+                    >
+                      <i class="fa-solid fa-heart text-gray-800"></i>
+                      <i class="fa-regular fa-heart text-pink-600"></i>
+                    </div>
+                    <div
+                      class="basis-10"
+                      th:onclick="handleStockClick([[${stock}]])"
+                    >
                       <div class="stock-name" th:text="${stock.name}"></div>
                       <div
                         class="stock-price"
@@ -114,7 +121,7 @@
                         th:text="${stock.errorRate} + '%'"
                       ></div>
                     </div>
-                  </a>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -124,7 +131,25 @@
     </div>
 
     <script th:inline="javascript">
+      var favorites = /* [[${favorites}]] */ "";
       var myChart;
+
+      function toggleFavorite(stock) {
+        fetch(`/favorite/${stock.name}`, { method: "POST" })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(
+                `Network response was not ok: ${response.status}`
+              );
+            }
+            return response.json();
+          })
+          .then((body) => {
+            if (!favorites.find((favorite) => favorite === stock.name))
+              favorites.push(stock.name);
+          });
+      }
+
       function handleStockClick(stock) {
         if (myChart) {
           myChart.destroy();
