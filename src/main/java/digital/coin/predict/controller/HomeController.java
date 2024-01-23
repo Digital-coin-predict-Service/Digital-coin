@@ -36,6 +36,7 @@ public class HomeController {
     @GetMapping("/")
     public String stocksViewer(Model model, HttpServletRequest request, @CookieValue(value = "userName", required = false) String userName) {
         List<Stock> stocks = stockService.findAll();
+        List<Favorite> favorites = favoriteService.findAllByUserName(userName);
 
         HttpSession httpSession = request.getSession(false);
 
@@ -49,7 +50,6 @@ public class HomeController {
 
             model.addAttribute("login", true);
 
-            List<Favorite> favorites = favoriteService.findAllByUserName(userName);
 
             for (Favorite favoriteStock : favorites) {
                 stocks.remove(favoriteStock.getStock());
@@ -58,6 +58,7 @@ public class HomeController {
         }
 
         model.addAttribute("stocks", stocks);
+        model.addAttribute("favorites", favorites);
 
         return "stockView";
     }

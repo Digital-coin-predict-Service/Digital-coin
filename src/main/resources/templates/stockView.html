@@ -1,6 +1,6 @@
 <!-- stocks.html -->
 <!DOCTYPE html>
-<html data-theme="emerald" xmlns:th="http://www.thymeleaf.org">
+<html data-theme="bumblebee" xmlns:th="http://www.thymeleaf.org">
   <head>
     <header th:replace="header :: HeaderFragment"></header>
     <title th:text="${pageTitle}">Default Title</title>
@@ -8,21 +8,22 @@
   </head>
   <body>
     <div class="container h-screen m-auto">
-      <div class="flex flex-col">
-        <div class="basis-1/12 navbar bg-base-100 shadow-xl rounded-box">
+      <div class="flex flex-col h-full">
+        <div class="h-4"></div>
+        <div class="navbar bg-base-200 shadow-xl rounded-box">
           <div class="flex-1">
             <a class="btn btn-ghost text-xl">황알거</a>
           </div>
-          <div class="flex-none">
+          <div class="flex flex-row gap-3">
             <button
-              class="btn btn-dark"
+              class="btn btn-neutral"
               th:if="${login == false}"
               th:onclick="moveLogin()"
             >
               로그인
             </button>
             <button
-              class="btn btn-light"
+              class="btn btn-outline"
               th:if="${login == false}"
               th:onclick="moveRegister()"
             >
@@ -40,39 +41,76 @@
             </form>
           </div>
         </div>
-        <div class="flex flex-row basis-11/12">
-          <div class="basis-5/6 flex flex-col">
-            <div class="basis-1/12">
-              <h4 class="text-center">종목을 선택하세요</h4>
-            </div>
-            <div class="basis-8/12">
-              <canvas class="graph-container" id="myChart"> </canvas>
-            </div>
-            <div class="basis-3/12">
-              <div class="stats shadow">
-                <div class="stat">
-                  <div class="stat-figure text-primary">
-                    <i class="fa-solid fa-arrow-trend-up text-2xl"></i>
+        <div class="h-4"></div>
+        <div class="flex flex-row grow">
+          <div class="basis-9/12 flex flex-col">
+            <div class="basis-10/12">
+              <div class="w-full h-full p-10 relative">
+                <div
+                  id="select-coin-hero"
+                  class="hero w-full h-full bg-base-200 rounded rounded-lg shadow shadow-lg"
+                >
+                  <div class="hero-content text-center">
+                    <div class="max-w-md">
+                      <h1 class="text-5xl font-bold">종목을 선택해보세요</h1>
+                      <p class="py-6">
+                        우량한 비트코인도, 영세한 알트코인도 가능성을 예측하고
+                        수익을 실현해보세요.
+                      </p>
+                    </div>
                   </div>
-                  <div class="stat-title">BTC</div>
-                  <div class="stat-value text-primary">57,589,000₩</div>
-                  <div class="stat-desc">2% 상승 예상</div>
                 </div>
+
+                <canvas
+                  class="absolute w-full h-full left-0 top-0"
+                  id="myChart"
+                >
+                </canvas>
               </div>
             </div>
-          </div>
-          <div class="basis-1/6 flex flex-col">
-            <div>
-              <h3>종목</h3>
+            <div class="basis-2/12 flex">
+              <div class="grow"></div>
+              <div class="stats shadow m-auto">
+                <div class="stat place-items-center">
+                  <div class="stat-title">현재가</div>
+                  <div class="stat-value">57,589,000₩</div>
+                  <div class="stat-desc">2024-01-26 10:25:00</div>
+                </div>
+
+                <div class="stat place-items-center">
+                  <div class="stat-title">예측가</div>
+                  <div class="stat-value text-secondary">57,589,000₩</div>
+                  <div class="stat-desc text-secondary">↗︎ 42,000(2%)</div>
+                </div>
+
+                <div class="stat place-items-center">
+                  <div class="stat-title">이전 예측 차이</div>
+                  <div class="stat-value">120,000₩</div>
+                </div>
+              </div>
+              <div class="grow"></div>
             </div>
-            <div>
-              <ul class="menu bg-base-200 w-56 rounded-box">
-                <li
-                  th:each="stock : ${stocks}"
-                  th:onclick="handleStockClick([[${stock}]])"
-                >
-                  <a>
-                    <div class="stock-details">
+          </div>
+          <div class="divider lg:divider-horizontal"></div>
+          <div class="grow flex flex-col">
+            <div class="basis-1/12 text-center">
+              <span class="text-2xl">종목</span>
+            </div>
+            <div class="basis-11/12 overflow-y-auto border border-base-200">
+              <ul class="menu flex flex-col flex-warp">
+                <li th:each="stock : ${stocks}">
+                  <div class="stock-details flex w-full">
+                    <div
+                      class="basis-2"
+                      th:onclick="toggleFavorite([[${stock}]])"
+                    >
+                      <i class="fa-solid fa-heart text-gray-800"></i>
+                      <i class="fa-regular fa-heart text-pink-600"></i>
+                    </div>
+                    <div
+                      class="basis-10"
+                      th:onclick="handleStockClick([[${stock}]])"
+                    >
                       <div class="stock-name" th:text="${stock.name}"></div>
                       <div
                         class="stock-price"
@@ -83,7 +121,7 @@
                         th:text="${stock.errorRate} + '%'"
                       ></div>
                     </div>
-                  </a>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -93,7 +131,25 @@
     </div>
 
     <script th:inline="javascript">
+      var favorites = /* [[${favorites}]] */ "";
       var myChart;
+
+      function toggleFavorite(stock) {
+        fetch(`/favorite/${stock.name}`, { method: "POST" })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(
+                `Network response was not ok: ${response.status}`
+              );
+            }
+            return response.json();
+          })
+          .then((body) => {
+            if (!favorites.find((favorite) => favorite === stock.name))
+              favorites.push(stock.name);
+          });
+      }
+
       function handleStockClick(stock) {
         if (myChart) {
           myChart.destroy();
@@ -109,6 +165,8 @@
             return response.json();
           })
           .then((jsonData) => {
+            const readyHero = document.getElementById("select-coin-hero");
+            readyHero && readyHero.remove();
             const ctx = document.getElementById("myChart").getContext("2d");
 
             myChart = new Chart(ctx, {
@@ -122,7 +180,12 @@
                   {
                     label: "Price of " + stock.name,
                     data: jsonData,
-                    borderWidth: 1,
+                    borderWidth: 2,
+                    tension: 0.6,
+                    segment: {
+                      borderDash: (ctx) =>
+                        ctx.p1DataIndex > 20 ? [6, 6] : undefined,
+                    },
                   },
                 ],
               },
