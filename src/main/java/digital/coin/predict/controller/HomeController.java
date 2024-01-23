@@ -42,7 +42,7 @@ public class HomeController {
         if (httpSession == null || userName == null) {
             model.addAttribute("login", false);
         } else {
-            if (!sessionService.validSession(httpSession.getId())) {
+            if (!sessionService.validSession(httpSession.getId(), userName)) {
                 model.addAttribute("login", false);
                 return "stockView";
             }

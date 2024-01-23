@@ -1,10 +1,13 @@
 package digital.coin.predict.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 @Entity
 @Getter
@@ -13,4 +16,7 @@ import lombok.NoArgsConstructor;
 public class Session extends BaseEntity{
     @Id
     private String sessionId;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private User user;
 }

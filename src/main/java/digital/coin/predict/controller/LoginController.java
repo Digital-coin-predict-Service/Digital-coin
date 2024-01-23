@@ -37,8 +37,6 @@ public class LoginController {
 
     @GetMapping("/login")
     public String userLoginView(@ModelAttribute("userRequestDto") UserRequestDto userRequestDto, Model model) {
-//        System.out.println(isValid);
-
         return "login";
     }
 
@@ -51,7 +49,7 @@ public class LoginController {
         httpSession.setAttribute("userName", userRequestDto.getName());
         httpSession.setMaxInactiveInterval(1800);
 
-        sessionService.saveSession(httpSession.getId());
+        sessionService.saveSession(httpSession.getId(), userRequestDto.getName());
 
         Cookie cookie = new Cookie("userName", userRequestDto.getName());
         cookie.setAttribute("sessionId", httpSession.getId());
@@ -64,14 +62,13 @@ public class LoginController {
     public String userLogOut(HttpServletRequest request, HttpServletResponse response) {
         HttpSession httpSession = request.getSession(false);
         String userName = (String)httpSession.getAttribute("userName");
-        System.out.println(userName);
 
         if (userName != null) {
             Cookie logoutCookie = new Cookie("userName", null);
             logoutCookie.setAttribute("sessionId", null);
             logoutCookie.setMaxAge(0);
 
-            sessionService.deleteSession(httpSession.getId());
+            sessionService.deleteSession(httpSession.getId(), userName);
 
             httpSession.removeAttribute("userName");
             httpSession.invalidate();
