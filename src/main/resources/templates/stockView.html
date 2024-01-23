@@ -45,7 +45,7 @@
         <div class="flex flex-row grow">
           <div class="basis-9/12 flex flex-col">
             <div class="basis-10/12">
-              <div class="w-full h-full p-10">
+              <div class="w-full h-full p-10 relative">
                 <div
                   id="select-coin-hero"
                   class="hero w-full h-full bg-base-200 rounded rounded-lg shadow shadow-lg"
@@ -60,7 +60,12 @@
                     </div>
                   </div>
                 </div>
-                <canvas class="graph-container" id="myChart"> </canvas>
+
+                <canvas
+                  class="absolute w-full h-full left-0 top-0"
+                  id="myChart"
+                >
+                </canvas>
               </div>
             </div>
             <div class="basis-2/12">
@@ -125,7 +130,8 @@
             return response.json();
           })
           .then((jsonData) => {
-            document.getElementsByName("select-coin-hero").remove();
+            const readyHero = document.getElementById("select-coin-hero");
+            readyHero && readyHero.remove();
             const ctx = document.getElementById("myChart").getContext("2d");
 
             myChart = new Chart(ctx, {
@@ -139,7 +145,12 @@
                   {
                     label: "Price of " + stock.name,
                     data: jsonData,
-                    borderWidth: 1,
+                    borderWidth: 2,
+                    tension: 0.6,
+                    segment: {
+                      borderDash: (ctx) =>
+                        ctx.p1DataIndex > 20 ? [6, 6] : undefined,
+                    },
                   },
                 ],
               },
