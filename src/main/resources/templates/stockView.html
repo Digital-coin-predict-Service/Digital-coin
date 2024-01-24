@@ -131,7 +131,7 @@
     </div>
 
     <script th:inline="javascript">
-      var favorites = /* [[${favorites}]] */ "";
+      var favorites = [[${favorites}]];
       var myChart;
 
       function toggleFavorite(stock) {
