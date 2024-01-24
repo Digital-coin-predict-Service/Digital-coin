@@ -39,6 +39,9 @@
 
 **로그인을 하면 예측된 10개의 값 모두 열람**할 수 있습니다.
 
+![image](https://github.com/Digital-coin-predict-Service/Digital-coin/assets/112631585/224c04a8-c535-4863-8cec-40089ddb3190)
+로그인을 하지 않으면 즐겨찾기 기능을 사용할 수 없습니다.
+
 #### 3. 즐겨찾기
 ![image](https://github.com/Digital-coin-predict-Service/Digital-coin/assets/112631585/030659ba-7277-472d-b5df-b15f49c6ec08)
 
