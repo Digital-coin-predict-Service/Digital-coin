@@ -19,11 +19,11 @@ public class FavoriteService {
     private final StockRepository stockRepository;
     private final FavoriteRepository favoriteRepository;
 
-    public void addFavorite(String userName, String stockCode){
+    public void addFavorite(String userName, String stockCode) {
         Optional<User> userResult = userRepository.findByUserName(userName);
         Optional<Stock> stockResult = stockRepository.findByCode(stockCode);
 
-        if(stockResult.isEmpty() || userResult.isEmpty())
+        if (stockResult.isEmpty() || userResult.isEmpty())
             return;
 
         if (favoriteRepository.existsByUserAndStock(userResult.get(), stockResult.get()))

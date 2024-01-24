@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public interface FavoriteRepository extends JpaRepository<Favorite,Long> {
     @Query("SELECT f FROM Favorite f WHERE f.user = :user")
     List<Favorite> findAllByUser(@Param("user") User user);
 
+    @Transactional
     void deleteByUserAndStock(User user, Stock stock);
 
     boolean existsByUserAndStock(User user, Stock stock);
