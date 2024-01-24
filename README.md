@@ -1,5 +1,6 @@
 # 가상 화폐 예측 사이트
 ## LSTM 모델을 활용하여 예측된 가상화폐의 가격을 보여주는 사이트입니다.
+#### ✔ **LSTM 모델의 전처리와 학습 및 결과는 BTC-Prediction의 readme에 있습니다.**
 ![image](https://github.com/Digital-coin-predict-Service/Digital-coin/assets/112631585/5d7589ef-f299-42f8-b110-9f3fec56bb4c)
 ![image](https://github.com/Digital-coin-predict-Service/Digital-coin/assets/112631585/bdaf0062-de4b-4498-a65d-2e0b537d94f4)
 ### 제작 동기
