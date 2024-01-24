@@ -18,9 +18,11 @@ public interface FavoriteRepository extends JpaRepository<Favorite,Long> {
     @Query("SELECT f FROM Favorite f WHERE f.user = :user")
     List<Favorite> findAllByUser(@Param("user") User user);
 
-    boolean deleteByUserAndStock(User user, Stock stock);
+    void deleteByUserAndStock(User user, Stock stock);
 
     boolean existsByUserAndStock(User user, Stock stock);
+
+
 //    @Query("DELETE FROM Favorite f WHERE f.user = :user AND f.stock = :stock")
 //    Boolean deleteFavoriteByUserAndStock(@Param("user") User user,@Param("stock") Stock stock);
 //

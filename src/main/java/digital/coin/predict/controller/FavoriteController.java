@@ -32,9 +32,11 @@ public class FavoriteController {
 //        return ResponseEntity.ok().build();
 //    }
 
-    @PostMapping("/{stockName}")
-    public void addFavorite(@CookieValue(value = "userName") String userName, @PathVariable String stockName) {
-        favoriteService.addFavorite(userName, stockName);
+    @PostMapping("/{stockCode}")
+    public ResponseEntity<Void> addFavorite(@CookieValue(value = "userName") String userName, @PathVariable String stockCode) {
+        favoriteService.addFavorite(userName, stockCode);
+
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/all")
@@ -52,9 +54,11 @@ public class FavoriteController {
         return ResponseEntity.ok(favoriteResponseDtos);
     }
 
-    @DeleteMapping("/{stockName}")
-    public void deleteFavorite(@CookieValue(value = "userName") String userName, @PathVariable String stockName) {
-        favoriteService.deleteFavorite(userName, stockName);
+    @DeleteMapping("/{stockCode}")
+    public ResponseEntity<Void> deleteFavorite(@CookieValue(value = "userName") String userName, @PathVariable String stockCode) {
+        favoriteService.deleteFavorite(userName, stockCode);
+
+        return ResponseEntity.ok().build();
     }
 
 

@@ -37,6 +37,7 @@ public class HomeController {
     public String stocksViewer(Model model, HttpServletRequest request, @CookieValue(value = "userName", required = false) String userName) {
         List<Stock> stocks = stockService.findAll();
         List<Favorite> favorites = favoriteService.findAllByUserName(userName);
+        List<Long> favoriteStocks = new ArrayList<>();
 
         HttpSession httpSession = request.getSession(false);
 
@@ -48,11 +49,12 @@ public class HomeController {
             for (Favorite favoriteStock : favorites) {
                 stocks.remove(favoriteStock.getStock());
                 stocks.add(0, favoriteStock.getStock());
+                favoriteStocks.add(favoriteStock.getStock().getId());
             }
         }
 
+        model.addAttribute("favorites", favoriteStocks);
         model.addAttribute("stocks", stocks);
-        model.addAttribute("favorites", favorites);
 
         return "stockView";
     }

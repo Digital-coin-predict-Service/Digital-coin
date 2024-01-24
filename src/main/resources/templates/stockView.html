@@ -104,8 +104,8 @@
                       class="basis-2"
                       th:onclick="toggleFavorite([[${stock}]])"
                     >
-                      <i class="fa-solid fa-heart text-gray-800"></i>
-                      <i class="fa-regular fa-heart text-pink-600"></i>
+                      <i th:if="${favorites == null or not #lists.contains(favorites, stock.id)}" class="fa-solid fa-heart text-gray-800"></i>
+                      <i th:if="${favorites != null and #lists.contains(favorites, stock.id)}" class="fa-regular fa-heart text-pink-600"></i>
                     </div>
                     <div
                       class="basis-10"
@@ -135,19 +135,36 @@
       var myChart;
 
       function toggleFavorite(stock) {
-        fetch(`/favorite/${stock.name}`, { method: "POST" })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(
-                `Network response was not ok: ${response.status}`
-              );
-            }
-            return response.json();
-          })
-          .then((body) => {
-            if (!favorites.find((favorite) => favorite === stock.name))
-              favorites.push(stock.name);
-          });
+        if (!favorites.includes(stock.id)) {
+          fetch(`/favorite/${stock.code}`, { method: "POST" })
+                  .then((response) => {
+                    if (!response.ok) {
+                      throw new Error(
+                              `Network response was not ok: ${response.status}`
+                      );
+                    }
+                    return response.json();
+                  })
+                  .then((body) => {
+                    if (!favorites.find((favorite) => favorite === stock.name))
+                      favorites.push(stock.name);
+                  });
+        }
+        else if (favorites.includes(stock.id)) {
+          fetch(`/favorite/${stock.code}`, { method: "DELETE" })
+                  .then((response) => {
+                    if (!response.ok) {
+                      throw new Error(
+                              `Network response was not ok: ${response.status}`
+                      );
+                    }
+                    return response.json();
+                  })
+                  .then((body) => {
+                    if (!favorites.find((favorite) => favorite === stock.name))
+                      favorites.push(stock.name);
+                  });
+        }
       }
 
       function handleStockClick(stock) {

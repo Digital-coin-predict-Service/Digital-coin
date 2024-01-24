@@ -8,7 +8,6 @@ import digital.coin.predict.repository.StockRepository;
 import digital.coin.predict.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,12 +19,15 @@ public class FavoriteService {
     private final StockRepository stockRepository;
     private final FavoriteRepository favoriteRepository;
 
-    public Boolean addFavorite(String userName, String stockName){
+    public void addFavorite(String userName, String stockCode){
         Optional<User> userResult = userRepository.findByUserName(userName);
-        Optional<Stock> stockResult = stockRepository.findByName(stockName);
+        Optional<Stock> stockResult = stockRepository.findByCode(stockCode);
 
         if(stockResult.isEmpty() || userResult.isEmpty())
-            return false;
+            return;
+
+        if (favoriteRepository.existsByUserAndStock(userResult.get(), stockResult.get()))
+            return;
 
         Stock stock = stockResult.get();
         User user = userResult.get();
@@ -33,7 +35,6 @@ public class FavoriteService {
         Favorite favorite = Favorite.builder().stock(stock).user(user).build();
         favoriteRepository.save(favorite);
 
-        return true;
     }
 
     //입력받은 모든 id에 대한 검색
@@ -55,14 +56,14 @@ public class FavoriteService {
         return favoriteRepository.findAllByUser(result.get());
     }
 
-    public boolean deleteFavorite(String userName, String stockName) {
+    public void deleteFavorite(String userName, String stockCode) {
         Optional<User> userResult = userRepository.findByUserName(userName);
-        Optional<Stock> stockResult = stockRepository.findByName(stockName);
+        Optional<Stock> stockResult = stockRepository.findByCode(stockCode);
 
         if (userResult.isEmpty() || stockResult.isEmpty())
-            return false;
+            return;
 
-        return favoriteRepository.deleteByUserAndStock(userResult.get(), stockResult.get());
+        favoriteRepository.deleteByUserAndStock(userResult.get(), stockResult.get());
     }
 
 //    public Boolean deleteFavorite(User user, Long id) {
