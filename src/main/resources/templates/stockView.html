@@ -3,7 +3,9 @@
 <html data-theme="bumblebee" xmlns:th="http://www.thymeleaf.org">
   <head>
     <header th:replace="header :: HeaderFragment"></header>
-    <title th:text="${pageTitle}">Default Title</title>
+    <title id="title">
+      가상화폐 예측
+    </title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
@@ -73,19 +75,26 @@
               <div class="stats shadow m-auto">
                 <div class="stat place-items-center">
                   <div class="stat-title">현재가</div>
-                  <div class="stat-value">57,589,000₩</div>
-                  <div class="stat-desc">2024-01-26 10:25:00</div>
+                  <div class="stat-value">
+                    <span id="cur_price" >-₩</span>
+                  </div>
+                  <div class="stat-desc">
+                    <span id="cur_time">-</span></div>
                 </div>
 
                 <div class="stat place-items-center">
                   <div class="stat-title">예측가</div>
-                  <div class="stat-value text-secondary">57,589,000₩</div>
-                  <div class="stat-desc text-secondary">↗︎ 42,000(2%)</div>
+                  <div class="stat-value text-secondary">
+                    <span id="estimated_price">-₩</span>
+                  </div>
+                  <div class="stat-desc text-secondary">
+                    <span id="estimated_price_diff">-(-%)</span>
+                  </div>
                 </div>
 
                 <div class="stat place-items-center">
                   <div class="stat-title">이전 예측 차이</div>
-                  <div class="stat-value">120,000₩</div>
+                  <div class="stat-value"><span id="latest_error">-₩</span></div>
                 </div>
               </div>
               <div class="grow"></div>
@@ -114,11 +123,11 @@
                       <div class="stock-name" th:text="${stock.name}"></div>
                       <div
                         class="stock-price"
-                        th:text="${stock.latestPrice} + '원'"
+                        th:text="${#numbers.formatCurrency(stock.latestPrice)} + ' ' + 차이"
                       ></div>
                       <div
                         class="rate"
-                        th:text="${stock.errorRate} + '%'"
+                        th:text="${#numbers.formatPercent(stock.errorRate, 1, 2)} + ' ' + 오차"
                       ></div>
                     </div>
                   </div>
@@ -132,9 +141,14 @@
 
     <script th:inline="javascript">
       var favorites = [[${favorites}]];
+      var login = [[${login}]];
       var myChart;
+      let now = new Date();
 
       function toggleFavorite(stock) {
+        if (!login) {
+          alert("로그인 후 이용 가능합니다.");
+        }
         if (!favorites.includes(stock.id)) {
           fetch(`/favorite/${stock.code}`, { method: "POST" })
                   .then((response) => {
@@ -173,65 +187,76 @@
         }
 
         fetch("stock/" + stock.name)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(
-                `Network response was not ok: ${response.status}`
-              );
-            }
-            return response.json();
-          })
-          .then((jsonData) => {
-            const readyHero = document.getElementById("select-coin-hero");
-            readyHero && readyHero.remove();
-            const ctx = document.getElementById("myChart").getContext("2d");
+                .then((response) => {
+                  if (!response.ok) {
+                    throw new Error(
+                            `Network response was not ok: ${response.status}`
+                    );
+                  }
+                  return response.json();
+                })
+                .then((jsonData) => {
+                  const readyHero = document.getElementById("select-coin-hero");
+                  readyHero && readyHero.remove();
+                  const ctx = document.getElementById("myChart").getContext("2d");
 
-            myChart = new Chart(ctx, {
-              type: "line",
-              data: {
-                labels: [
-                  -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7,
-                  -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-                ],
-                datasets: [
-                  {
-                    label: "Price of " + stock.name,
-                    data: jsonData,
-                    borderWidth: 2,
-                    tension: 0.6,
-                    segment: {
-                      borderDash: (ctx) =>
-                        ctx.p1DataIndex > 20 ? [6, 6] : undefined,
+                  myChart = new Chart(ctx, {
+                    type: "line",
+                    data: {
+                      labels: [
+                        -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7,
+                        -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+                      ],
+                      datasets: [
+                        {
+                          label: "Price of " + stock.name,
+                          data: jsonData,
+                          borderWidth: 2,
+                          tension: 0.6,
+                          segment: {
+                            borderDash: (ctx) =>
+                                    ctx.p1DataIndex > 20 ? [6, 6] : undefined,
+                          },
+                        },
+                      ],
                     },
-                  },
-                ],
-              },
-              options: {
-                scales: {
-                  x: {
-                    title: {
-                      display: true,
-                      text: "Minute",
+                    options: {
+                      scales: {
+                        x: {
+                          title: {
+                            display: true,
+                            text: "Minute",
+                          },
+                        },
+                        y: {
+                          suggestedMin: Math.min(...jsonData),
+                          suggestedMax: Math.max(...jsonData),
+                          title: {
+                            display: true,
+                            text: "Price",
+                          },
+                        },
+                      },
+                      responsive: true,
+                      maintainAspectRatio: false,
                     },
-                  },
-                  y: {
-                    suggestedMin: Math.min(...jsonData),
-                    suggestedMax: Math.max(...jsonData),
-                    title: {
-                      display: true,
-                      text: "Price",
-                    },
-                  },
-                },
-                responsive: true,
-                maintainAspectRatio: false,
-              },
-            });
-            var selectedStockText =
-              document.getElementById("selectedStockText");
-            selectedStockText.style.display = "none";
-          })
-          .catch((error) => console.error("파일을 읽는 중 오류 발생:", error));
+                  });
+                  let cur_price = document.getElementById("cur_price");
+                  cur_price.innerText = stock.currentPrice + "₩";
+                  let cur_time = document.getElementById("cur_time");
+                  cur_time.innerText = now.getFullYear() + "-" + now.getMonth() + 1 + "-" + now.getDate() + "  " + now.getHours() + ":" + now.getMinutes();
+                  let estimated_price = document.getElementById("estimated_price");
+                  estimated_price.innerText = stock.estimatedPrice.toFixed(2) + "₩";
+                  let estimated_price_diff = document.getElementById("estimated_price_diff");
+                  let diff = stock.estimatedPrice - stock.currentPrice;
+                  estimated_price_diff.innerText = diff.toFixed(2) + "(" + ((diff/stock.currentPrice) * 100).toFixed(2) + "%)";
+                  let latest_eror = document.getElementById("latest_error");
+                  latest_eror.innerText = stock.latestPrice.toFixed(2) + "₩";
+
+                  let title = document.getElementById("title");
+                  title.innerText = "가상화폐 예측 : " + stock.code;
+                })
+                .catch((error) => console.error("파일을 읽는 중 오류 발생:", error));
       }
     </script>
 

@@ -27,6 +27,10 @@ public class Stock extends BaseEntity {
 
     private Double errorRate;
 
+    private Double currentPrice;
+
+    private Double estimatedPrice;
+
     public Stock(String name, String code) {
         this.name = name;
         this.code = code;
