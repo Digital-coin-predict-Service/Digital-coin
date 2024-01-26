@@ -242,16 +242,20 @@
                     },
                   });
                   let cur_price = document.getElementById("cur_price");
-                  cur_price.innerText = stock.currentPrice + "₩";
+                  cur_price.innerText = stock.currentPrice.toLocaleString() + "₩";
+
                   let cur_time = document.getElementById("cur_time");
                   cur_time.innerText = now.getFullYear() + "-" + now.getMonth() + 1 + "-" + now.getDate() + "  " + now.getHours() + ":" + now.getMinutes();
+
                   let estimated_price = document.getElementById("estimated_price");
-                  estimated_price.innerText = stock.estimatedPrice.toFixed(2) + "₩";
+                  estimated_price.innerText = Number(stock.estimatedPrice.toFixed(1)).toLocaleString() + "₩";
+
                   let estimated_price_diff = document.getElementById("estimated_price_diff");
                   let diff = stock.estimatedPrice - stock.currentPrice;
-                  estimated_price_diff.innerText = diff.toFixed(2) + "(" + ((diff/stock.currentPrice) * 100).toFixed(2) + "%)";
+                  estimated_price_diff.innerText = diff.toLocaleString() + "(" + ((diff/stock.currentPrice) * 100).toFixed(2) + "%)";
+
                   let latest_eror = document.getElementById("latest_error");
-                  latest_eror.innerText = stock.latestPrice.toFixed(2) + "₩";
+                  latest_eror.innerText = Number(stock.latestPrice.toFixed(1)).toLocaleString() + "₩";
 
                   let title = document.getElementById("title");
                   title.innerText = "가상화폐 예측 : " + stock.code;
