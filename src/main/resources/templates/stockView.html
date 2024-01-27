@@ -3,9 +3,7 @@
 <html data-theme="bumblebee" xmlns:th="http://www.thymeleaf.org">
   <head>
     <header th:replace="header :: HeaderFragment"></header>
-    <title id="title">
-      가상화폐 예측
-    </title>
+    <title id="title">가상화폐 예측</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
@@ -56,7 +54,8 @@
                     <div class="max-w-md">
                       <h1 class="text-5xl font-bold">종목을 선택해보세요</h1>
                       <p class="py-6">
-                        우량한 비트코인도, 영세한 알트코인도 가능성을 예측하고<br>
+                        우량한 비트코인도, 영세한 알트코인도 가능성을
+                        예측하고<br />
                         수익을 실현해보세요.
                       </p>
                     </div>
@@ -76,10 +75,11 @@
                 <div class="stat place-items-center">
                   <div class="stat-title">현재가</div>
                   <div class="stat-value">
-                    <span id="cur_price" >-₩</span>
+                    <span id="cur_price">-₩</span>
                   </div>
                   <div class="stat-desc">
-                    <span id="cur_time">-</span></div>
+                    <span id="cur_time">-</span>
+                  </div>
                 </div>
 
                 <div class="stat place-items-center">
@@ -94,7 +94,9 @@
 
                 <div class="stat place-items-center">
                   <div class="stat-title">이전 예측 차이</div>
-                  <div class="stat-value"><span id="latest_error">-₩</span></div>
+                  <div class="stat-value">
+                    <span id="latest_error">-₩</span>
+                  </div>
                 </div>
               </div>
               <div class="grow"></div>
@@ -106,33 +108,7 @@
               <span class="text-2xl">종목</span>
             </div>
             <div class="basis-11/12 overflow-y-auto border border-base-200">
-              <ul class="menu flex flex-col flex-warp">
-                <li th:each="stock : ${stocks}">
-                  <div class="stock-details flex w-full">
-                    <div
-                      class="basis-2"
-                      th:onclick="toggleFavorite([[${stock}]])"
-                    >
-                      <i th:if="${favorites == null or not #lists.contains(favorites, stock.id)}" class="fa-solid fa-heart text-gray-800"></i>
-                      <i th:if="${favorites != null and #lists.contains(favorites, stock.id)}" class="fa-regular fa-heart text-pink-600"></i>
-                    </div>
-                    <div
-                      class="basis-10"
-                      th:onclick="handleStockClick([[${stock}]])"
-                    >
-                      <div class="stock-name" th:text="${stock.name}"></div>
-                      <div
-                        class="stock-price"
-                        th:text="${#numbers.formatCurrency(stock.latestPrice)} + ' ' + 차이"
-                      ></div>
-                      <div
-                        class="rate"
-                        th:text="${#numbers.formatPercent(stock.errorRate, 1, 2)} + ' ' + 오차"
-                      ></div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
+              <ul class="menu flex flex-col flex-warp" id="stockList"></ul>
             </div>
           </div>
         </div>
@@ -140,43 +116,82 @@
     </div>
 
     <script th:inline="javascript">
+      var stocks = [[${stocks}]];
       var favorites = [[${favorites}]];
       var login = [[${login}]];
+
+      let stockListElement = document.getElementById('stockList')
+
       var myChart;
       let now = new Date();
+
+
+
+      function renderStockList() {
+        // 리스트 모두 제거
+        stockListElement.textContent = ''
+        const liList = stocks.map(stock => {
+          const li = document.createElement('li')
+          li.innerHTML = `
+            <div class="stock-details flex w-full">
+              <div
+                class="basis-2"
+                onclick='toggleFavorite(${JSON.stringify(stock)})'
+              >
+                ${
+                  favorites.includes(stock.id)
+                  ? '<i class="fa-solid fa-heart text-pink-600"></i>'
+                  : '<i class="fa-solid fa-heart text-gray-800"></i>'
+                }
+              </div>
+              <div
+                class="basis-10"
+                onclick='handleStockClick(${JSON.stringify(stock)})'
+              >
+                <div>${stock.name}</div>
+                <div>₩${stock.latestPrice.toLocaleString()} 차이</div>
+                <div>${Math.round(stock.errorRate *10_000) / 100}% 오차</div>
+              </div>
+            </div>
+          `
+          return li
+        })
+
+
+        liList.forEach(li => stockListElement.appendChild(li))
+      }
 
       function toggleFavorite(stock) {
         if (!login) {
           alert("로그인 후 이용 가능합니다.");
+          return
         }
         if (!favorites.includes(stock.id)) {
           fetch(`/favorite/${stock.code}`, { method: "POST" })
                   .then((response) => {
                     if (!response.ok) {
-                      throw new Error(
-                              `Network response was not ok: ${response.status}`
-                      );
+                      throw new Error(`Network response was not ok: ${response.status}`);
                     }
-                    return response.json();
                   })
                   .then((body) => {
-                    if (!favorites.find((favorite) => favorite === stock.name))
-                      favorites.push(stock.name);
+                    if (!favorites.find((favorite) => favorite === stock.name)) {
+                      favorites.push(stock.id);
+                      renderStockList();
+                    }
                   });
         }
         else if (favorites.includes(stock.id)) {
           fetch(`/favorite/${stock.code}`, { method: "DELETE" })
                   .then((response) => {
                     if (!response.ok) {
-                      throw new Error(
-                              `Network response was not ok: ${response.status}`
-                      );
+                      throw new Error(`Network response was not ok: ${response.status}`);
                     }
-                    return response.json();
                   })
                   .then((body) => {
-                    if (!favorites.find((favorite) => favorite === stock.name))
-                      favorites.push(stock.name);
+                    if (!favorites.find((favorite) => favorite === stock.name)) {
+                      favorites = favorites.filter(favorite => favorite !== stock.id);
+                      renderStockList();
+                    }
                   });
         }
       }
@@ -261,6 +276,10 @@
                   title.innerText = "가상화폐 예측 : " + stock.code;
                 })
                 .catch((error) => console.error("파일을 읽는 중 오류 발생:", error));
+      }
+
+      window.onload = function() {
+        renderStockList()
       }
     </script>
 
